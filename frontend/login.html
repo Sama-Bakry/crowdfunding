@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Sign in to your CrowdFund account."
+    >
+
+    <title>Sign In — CrowdFund</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="auth-page">
+
+    <header class="site-header">
+        <div class="container navbar">
+
+            <a href="index.html" class="brand">
+                <span class="brand-mark">CF</span>
+                <span class="brand-name">CrowdFund</span>
+            </a>
+
+            <div class="nav-actions">
+                <span class="auth-nav-text">
+                    New to CrowdFund?
+                </span>
+
+                <a
+                    href="register.html"
+                    class="button button-dark"
+                >
+                    Create account
+                </a>
+            </div>
+
+        </div>
+    </header>
+
+
+    <main class="auth-main">
+
+        <div class="auth-container">
+
+            <section class="auth-intro">
+
+                <div class="section-kicker">
+                    WELCOME BACK
+                </div>
+
+                <h1>
+                    Good ideas
+                    need good
+                    <span>people.</span>
+                </h1>
+
+                <p>
+                    Sign in to continue discovering projects,
+                    managing your activity, and supporting ideas
+                    that matter.
+                </p>
+
+                <div class="auth-benefits">
+
+                    <div class="auth-benefit">
+                        <div class="auth-benefit-icon">
+                            ✓
+                        </div>
+
+                        <div>
+                            <strong>
+                                Continue where you left off
+                            </strong>
+
+                            <span>
+                                Keep your projects and activity in one place.
+                            </span>
+                        </div>
+                    </div>
+
+
+                    <div class="auth-benefit">
+                        <div class="auth-benefit-icon">
+                            ✓
+                        </div>
+
+                        <div>
+                            <strong>
+                                Secure access
+                            </strong>
+
+                            <span>
+                                Protected authentication for your account.
+                            </span>
+                        </div>
+                    </div>
+
+
+                    <div class="auth-benefit">
+                        <div class="auth-benefit-icon">
+                            ✓
+                        </div>
+
+                        <div>
+                            <strong>
+                                Stay connected
+                            </strong>
+
+                            <span>
+                                Follow the projects and causes you care about.
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <section class="auth-card">
+
+                <div class="auth-card-header">
+
+                    <span class="auth-card-label">
+                        SIGN IN
+                    </span>
+
+                    <h2>
+                        Welcome back
+                    </h2>
+
+                    <p>
+                        Enter your email and password to continue.
+                    </p>
+
+                </div>
+
+
+                <div
+                    id="login-alert"
+                    class="form-alert"
+                    role="alert"
+                    aria-live="polite"
+                    hidden
+                ></div>
+
+
+                <form
+                    id="login-form"
+                    class="auth-form"
+                    novalidate
+                >
+
+                    <div class="form-group">
+
+                        <label for="login-email">
+                            Email address
+                        </label>
+
+                        <input
+                            type="email"
+                            id="login-email"
+                            name="email"
+                            placeholder="you@example.com"
+                            autocomplete="email"
+                            required
+                        >
+
+                        <small
+                            class="field-error"
+                            id="login-email-error"
+                        ></small>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <div class="password-label-row">
+
+                            <label for="login-password">
+                                Password
+                            </label>
+
+                            <a
+                                href="forgot-password.html"
+                                class="password-link"
+                            >
+                                Forgot password?
+                            </a>
+
+                        </div>
+
+                        <div class="password-input-wrap">
+
+                            <input
+                                type="password"
+                                id="login-password"
+                                name="password"
+                                placeholder="Enter your password"
+                                autocomplete="current-password"
+                                required
+                            >
+
+                            <button
+                                type="button"
+                                class="password-toggle"
+                                id="login-password-toggle"
+                                aria-label="Show password"
+                            >
+                                Show
+                            </button>
+
+                        </div>
+
+                        <small
+                            class="field-error"
+                            id="login-password-error"
+                        ></small>
+
+                    </div>
+
+
+                    <label class="checkbox-row">
+
+                        <input
+                            type="checkbox"
+                            id="remember-me"
+                        >
+
+                        <span>
+                            Remember me on this device
+                        </span>
+
+                    </label>
+
+
+                    <button
+                        type="submit"
+                        id="login-button"
+                        class="button button-coral button-large auth-submit"
+                    >
+                        <span id="login-button-text">
+                            Sign in
+                        </span>
+                    </button>
+
+
+                    <p class="auth-footer-text">
+                        Don't have an account?
+
+                        <a href="register.html">
+                            Create one
+                        </a>
+                    </p>
+
+                </form>
+
+            </section>
+
+        </div>
+
+    </main>
+
+
+    <script src="app.js"></script>
+    <script src="login.js"></script>
+
+</body>
+</html>

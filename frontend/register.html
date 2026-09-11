@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Create Account — CrowdFund</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css?v=2"
+    >
+
+    <script
+        src="app.js?v=2"
+        defer
+    ></script>
+
+    <script
+        src="register.js?v=3"
+        defer
+    ></script>
+</head>
+
+<body class="auth-page">
+
+    <header class="site-header">
+        <div class="navbar">
+
+            <a
+                href="index.html"
+                class="brand"
+            >
+                <span class="brand-mark">C</span>
+                <span class="brand-name">CrowdFund</span>
+            </a>
+
+            <div class="nav-actions">
+
+                <span class="nav-question">
+                    Already have an account?
+                </span>
+
+                <a
+                    href="login.html"
+                    class="nav-login"
+                >
+                    Log in
+                </a>
+
+            </div>
+
+        </div>
+    </header>
+
+
+    <main class="auth-main">
+
+        <div class="auth-container">
+
+            <section class="auth-intro">
+
+                <p class="hero-kicker">
+                    Join the community
+                </p>
+
+                <h1>
+                    Turn ideas into
+                    <span>impact.</span>
+                </h1>
+
+                <p class="auth-intro-text">
+                    Create your account and become part of a
+                    community supporting meaningful projects
+                    across Egypt.
+                </p>
+
+                <div class="auth-benefit">
+
+                    <div class="auth-benefit-icon">
+                        ✓
+                    </div>
+
+                    <div>
+                        <strong>
+                            One account, many possibilities.
+                        </strong>
+
+                        <p>
+                            Support projects, follow ideas you
+                            believe in, and keep your journey
+                            organized in one place.
+                        </p>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <section class="auth-card">
+
+                <div class="auth-card-header">
+
+                    <p class="hero-kicker">
+                        Create account
+                    </p>
+
+                    <h2>
+                        Start your journey
+                    </h2>
+
+                    <p>
+                        Create your CrowdFund account in a few steps.
+                    </p>
+
+                </div>
+
+
+                <div
+                    id="register-alert"
+                    class="form-alert"
+                    hidden
+                ></div>
+
+
+                <form
+                    id="register-form"
+                    class="auth-form"
+                    novalidate
+                >
+
+                    <div class="form-row">
+
+                        <div class="form-group">
+
+                            <label for="first-name">
+                                First name
+                            </label>
+
+                            <input
+                                type="text"
+                                id="first-name"
+                                name="first_name"
+                                placeholder="Sama"
+                                autocomplete="given-name"
+                                required
+                            >
+
+                            <small
+                                id="first-name-error"
+                                class="field-error"
+                            ></small>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="last-name">
+                                Last name
+                            </label>
+
+                            <input
+                                type="text"
+                                id="last-name"
+                                name="last_name"
+                                placeholder="Ayman"
+                                autocomplete="family-name"
+                                required
+                            >
+
+                            <small
+                                id="last-name-error"
+                                class="field-error"
+                            ></small>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="email">
+                            Email address
+                        </label>
+
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="you@example.com"
+                            autocomplete="email"
+                            required
+                        >
+
+                        <small
+                            id="email-error"
+                            class="field-error"
+                        ></small>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="phone-number">
+                            Egyptian mobile number
+                        </label>
+
+                        <input
+                            type="tel"
+                            id="phone-number"
+                            name="phone_number"
+                            placeholder="01012345678"
+                            autocomplete="tel"
+                            inputmode="numeric"
+                            maxlength="11"
+                            required
+                        >
+
+                        <small class="input-hint">
+                            Example: 01012345678
+                        </small>
+
+                        <small
+                            id="phone-number-error"
+                            class="field-error"
+                        ></small>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="profile-picture">
+                            Profile picture
+                            <span class="optional">
+                                Optional
+                            </span>
+                        </label>
+
+                        <input
+                            type="file"
+                            id="profile-picture"
+                            name="profile_picture"
+                            accept="image/*"
+                        >
+
+                        <small
+                            id="profile-picture-error"
+                            class="field-error"
+                        ></small>
+
+                    </div>
+
+
+                    <div class="form-row">
+
+                        <div class="form-group">
+
+                            <label for="password">
+                                Password
+                            </label>
+
+                            <div class="password-input-wrap">
+
+                                <input
+                                    type="password"
+                                    id="password"
+                                    name="password"
+                                    placeholder="At least 8 characters"
+                                    autocomplete="new-password"
+                                    required
+                                >
+
+                                <button
+                                    type="button"
+                                    id="password-toggle"
+                                    class="password-toggle"
+                                    aria-label="Show password"
+                                >
+                                    Show
+                                </button>
+
+                            </div>
+
+                            <small
+                                id="password-error"
+                                class="field-error"
+                            ></small>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="confirm-password">
+                                Confirm password
+                            </label>
+
+                            <div class="password-input-wrap">
+
+                                <input
+                                    type="password"
+                                    id="confirm-password"
+                                    name="confirm_password"
+                                    placeholder="Repeat your password"
+                                    autocomplete="new-password"
+                                    required
+                                >
+
+                                <button
+                                    type="button"
+                                    id="confirm-password-toggle"
+                                    class="password-toggle"
+                                    aria-label="Show password"
+                                >
+                                    Show
+                                </button>
+
+                            </div>
+
+                            <small
+                                id="confirm-password-error"
+                                class="field-error"
+                            ></small>
+
+                        </div>
+
+                    </div>
+
+
+                    <label class="checkbox-row">
+
+                        <input
+                            type="checkbox"
+                            id="terms"
+                            name="terms"
+                        >
+
+                        <span>
+                            I agree to the
+                            <a href="#">
+                                Terms of Service
+                            </a>
+                            and
+                            <a href="#">
+                                Privacy Policy
+                            </a>.
+                        </span>
+
+                    </label>
+
+                    <small
+                        id="terms-error"
+                        class="field-error"
+                    ></small>
+
+
+                    <button
+                        type="submit"
+                        id="register-button"
+                        class="button button-coral auth-submit"
+                    >
+                        <span id="register-button-text">
+                            Create account
+                        </span>
+                    </button>
+
+                </form>
+
+
+                <p class="auth-footer-text">
+
+                    Already have an account?
+
+                    <a href="login.html">
+                        Log in
+                    </a>
+
+                </p>
+
+            </section>
+
+        </div>
+
+    </main>
+
+</body>
+</html>
