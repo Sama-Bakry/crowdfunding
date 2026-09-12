@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Project Details — CrowdFund</title>
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="projects.css">
+</head>
+
+<body>
+
+    <header class="site-header">
+        <div class="container navbar">
+
+            <a href="index.html" class="brand">
+                <span class="brand-mark">CF</span>
+                <span class="brand-name">CrowdFund</span>
+            </a>
+
+            <nav class="main-nav">
+                <a href="projects.html">Explore</a>
+            </nav>
+
+            <div class="nav-actions" id="nav-actions"></div>
+
+        </div>
+    </header>
+
+
+    <main class="page-main">
+        <div class="container">
+
+            <div id="detail-loading" class="loading-state">
+                Loading project...
+            </div>
+
+            <div id="detail-error" class="empty-state" hidden>
+                <h3>Project not found</h3>
+                <p>This project may have been removed or the link is incorrect.</p>
+                <a href="projects.html" class="button button-outline" style="margin-top: 14px;">
+                    Back to explore
+                </a>
+            </div>
+
+            <div id="detail-content" class="project-detail-grid" hidden>
+
+                <div>
+
+                    <div id="image-slider" class="image-slider" hidden>
+                        <div class="image-slider-main" id="image-slider-main"></div>
+
+                        <button type="button" class="image-slider-nav image-slider-prev" id="slider-prev" aria-label="Previous image">
+                            &#8249;
+                        </button>
+
+                        <button type="button" class="image-slider-nav image-slider-next" id="slider-next" aria-label="Next image">
+                            &#8250;
+                        </button>
+
+                        <div class="image-slider-dots" id="slider-dots"></div>
+                    </div>
+
+                    <div class="project-detail-header" id="detail-header"></div>
+
+                    <h1 class="project-detail-title" id="detail-title"></h1>
+
+                    <p class="project-detail-owner" id="detail-owner"></p>
+
+                    <div id="detail-tags"></div>
+
+                    <p class="project-detail-body" id="detail-body" style="margin-top: 18px;"></p>
+
+                </div>
+
+
+                <aside>
+
+                    <div class="funding-card">
+
+                        <div class="funding-amount" id="funding-raised"></div>
+                        <div class="funding-target" id="funding-target"></div>
+
+                        <div id="funding-progress-bar"></div>
+
+                        <div class="funding-dates">
+                            <span id="funding-start"></span>
+                            <span id="funding-end"></span>
+                        </div>
+
+                        <div class="funding-actions" id="funding-actions"></div>
+
+                    </div>
+
+                    <div class="funding-card" id="owner-actions-card" hidden>
+                        <div class="form-section-title">Manage this project</div>
+                        <div class="funding-actions">
+                            <a href="#" id="edit-project-link" class="button button-outline button-full">
+                                Edit project
+                            </a>
+
+                            <button type="button" id="cancel-project-button" class="button-danger button-full">
+                                Cancel project
+                            </button>
+
+                            <p class="field-error" id="cancel-project-note"></p>
+                        </div>
+                    </div>
+
+                </aside>
+
+            </div>
+
+        </div>
+    </main>
+
+
+    <script src="app.js"></script>
+    <script src="projects-common.js"></script>
+    <script src="project-details.js"></script>
+
+</body>
+</html>
