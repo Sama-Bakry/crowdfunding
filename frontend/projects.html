@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Explore Projects — CrowdFund</title>
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="projects.css">
+</head>
+
+<body>
+
+    <header class="site-header">
+        <div class="container navbar">
+
+            <a href="index.html" class="brand">
+                <span class="brand-mark">CF</span>
+                <span class="brand-name">CrowdFund</span>
+            </a>
+
+            <nav class="main-nav">
+                <a href="projects.html">Explore</a>
+                <a href="index.html#how-it-works">How it works</a>
+            </nav>
+
+            <div class="nav-actions" id="nav-actions"></div>
+
+        </div>
+    </header>
+
+
+    <main class="page-main">
+        <div class="container">
+
+            <div class="page-header">
+                <div>
+                    <h1>Explore projects</h1>
+                    <p>Discover fundraising campaigns from creators across Egypt.</p>
+                </div>
+
+                <a href="create-project.html" class="button button-coral">
+                    Start a project
+                </a>
+            </div>
+
+
+            <div class="projects-toolbar">
+
+                <select id="category-filter" aria-label="Filter by category">
+                    <option value="">All categories</option>
+                </select>
+
+                <input
+                    type="text"
+                    id="tag-filter"
+                    placeholder="Search by tag..."
+                    aria-label="Filter by tag"
+                >
+
+                <select id="ordering-filter" aria-label="Sort projects">
+                    <option value="-created_at">Newest first</option>
+                    <option value="created_at">Oldest first</option>
+                    <option value="-target_amount">Highest target</option>
+                    <option value="target_amount">Lowest target</option>
+                </select>
+
+            </div>
+
+
+            <div id="projects-loading" class="loading-state">
+                Loading projects...
+            </div>
+
+            <div id="projects-grid" class="browse-grid" hidden></div>
+
+            <div id="projects-empty" class="empty-state" hidden>
+                <h3>No projects found</h3>
+                <p>Try a different category or tag.</p>
+            </div>
+
+            <div id="projects-pagination" class="pagination" hidden>
+                <button type="button" id="pagination-prev" class="button-ghost">Previous</button>
+                <span id="pagination-info"></span>
+                <button type="button" id="pagination-next" class="button-ghost">Next</button>
+            </div>
+
+        </div>
+    </main>
+
+
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <div class="footer-brand">
+                <a href="index.html" class="brand">
+                    <span class="brand-mark">CF</span>
+                    <span class="brand-name">CrowdFund</span>
+                </a>
+                <p>Community-powered funding for meaningful ideas.</p>
+            </div>
+        </div>
+    </footer>
+
+
+    <script src="app.js"></script>
+    <script src="projects-common.js"></script>
+    <script src="projects.js"></script>
+
+</body>
+</html>

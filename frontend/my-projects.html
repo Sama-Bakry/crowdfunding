@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>My Projects — CrowdFund</title>
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="projects.css">
+</head>
+
+<body>
+
+    <header class="site-header">
+        <div class="container navbar">
+
+            <a href="index.html" class="brand">
+                <span class="brand-mark">CF</span>
+                <span class="brand-name">CrowdFund</span>
+            </a>
+
+            <nav class="main-nav">
+                <a href="projects.html">Explore</a>
+                <a href="my-projects.html">My projects</a>
+            </nav>
+
+            <div class="nav-actions" id="nav-actions"></div>
+
+        </div>
+    </header>
+
+
+    <main class="page-main">
+        <div class="container">
+
+            <div class="page-header">
+                <div>
+                    <h1>My projects</h1>
+                    <p>Manage the fundraising campaigns you've created.</p>
+                </div>
+
+                <a href="create-project.html" class="button button-coral">
+                    Start a project
+                </a>
+            </div>
+
+
+            <div id="my-projects-loading" class="loading-state">
+                Loading your projects...
+            </div>
+
+            <div id="my-projects-list"></div>
+
+            <div id="my-projects-empty" class="empty-state" hidden>
+                <h3>You haven't started a project yet</h3>
+                <p>Launch your first fundraising campaign in a few minutes.</p>
+                <a href="create-project.html" class="button button-coral" style="margin-top: 14px;">
+                    Start a project
+                </a>
+            </div>
+
+            <div id="my-projects-pagination" class="pagination" hidden>
+                <button type="button" id="pagination-prev" class="button-ghost">Previous</button>
+                <span id="pagination-info"></span>
+                <button type="button" id="pagination-next" class="button-ghost">Next</button>
+            </div>
+
+        </div>
+    </main>
+
+
+    <script src="app.js"></script>
+    <script src="projects-common.js"></script>
+    <script src="my-projects.js"></script>
+
+</body>
+</html>

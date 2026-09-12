@@ -275,6 +275,20 @@ function showLoggedInNavigation(
         </span>
 
         <a
+            href="my-projects.html"
+            class="nav-login"
+        >
+            My projects
+        </a>
+
+        <a
+            href="create-project.html"
+            class="button button-outline"
+        >
+            Start a project
+        </a>
+
+        <a
             href="profile.html"
             class="button button-outline"
         >
@@ -307,6 +321,7 @@ function showLoggedInNavigation(
         handleNavigationLogout
     );
 }
+
 
 
 /* =========================

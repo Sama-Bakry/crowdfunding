@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Edit Project — CrowdFund</title>
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="projects.css">
+</head>
+
+<body>
+
+    <header class="site-header">
+        <div class="container navbar">
+
+            <a href="index.html" class="brand">
+                <span class="brand-mark">CF</span>
+                <span class="brand-name">CrowdFund</span>
+            </a>
+
+            <nav class="main-nav">
+                <a href="projects.html">Explore</a>
+                <a href="my-projects.html">My projects</a>
+            </nav>
+
+            <div class="nav-actions" id="nav-actions"></div>
+
+        </div>
+    </header>
+
+
+    <main class="page-main">
+        <div class="container">
+
+            <div class="page-header">
+                <div>
+                    <h1>Edit project</h1>
+                    <p>Update your project's details, images, and campaign dates.</p>
+                </div>
+            </div>
+
+
+            <div id="edit-loading" class="loading-state">
+                Loading project...
+            </div>
+
+            <div id="edit-error" class="empty-state" hidden>
+                <h3 id="edit-error-title">Something went wrong</h3>
+                <p id="edit-error-message"></p>
+                <a href="my-projects.
+                html" class="button button-outline" style="margin-top: 14px;">
+                    Back to my projects
+                </a>
+            </div>
+
+
+            <div id="edit-content" hidden>
+
+                <div id="edit-alert" class="form-alert" hidden></div>
+
+                <section class="form-card">
+
+                    <div class="form-section-title">Project details</div>
+
+                    <form id="edit-project-form" novalidate>
+
+                        <div class="form-group">
+                            <label for="title">Project title</label>
+                            <input type="text" id="title" name="title" required>
+                            <small class="field-error" id="title-error"></small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="details">Project details</label>
+                            <textarea id="details" name="details" required></textarea>
+                            <small class="field-error" id="details-error"></small>
+                        </div>
+
+                        <div class="form-row">
+
+                            <div class="form-group">
+                                <label for="category">Category</label>
+                                <select id="category" name="category" required>
+                                    <option value="">Select a category</option>
+                                </select>
+                                <small class="field-error" id="category-error"></small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="target_amount">Target amount (EGP)</label>
+                                <input type="number" id="target_amount" name="target_amount" min="1" step="0.01" required>
+                                <small class="field-error" id="target_amount-error"></small>
+                            </div>
+
+                        </div>
+
+                        <div class="form-group">
+                            <label for="tags">
+                                Tags
+                                <span class="optional-label">Optional</span>
+                            </label>
+                            <input type="text" id="tags" name="tags" placeholder="solar, farming, community">
+                            <small class="form-hint">Separate tags with commas.</small>
+                            <small class="field-error" id="tags-error"></small>
+                        </div>
+
+                        <div class="form-row">
+
+                            <div class="form-group">
+                                <label for="start_date">Campaign start date</label>
+                                <input type="date" id="start_date" name="start_date" required>
+                                <small class="field-error" id="start_date-error"></small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="end_date">Campaign end date</label>
+                                <input type="date" id="end_date" name="end_date" required>
+                                <small class="field-error" id="end_date-error"></small>
+                            </div>
+
+                        </div>
+
+                        <button type="submit" id="save-button" class="button button-coral button-full">
+                            <span id="save-button-text">Save changes</span>
+                        </button>
+
+                    </form>
+
+                </section>
+
+
+                <section class="form-card">
+
+                    <div class="form-section-title">Project images</div>
+                    <div class="form-section-subtitle">
+                        Add more pictures or remove existing ones.
+                    </div>
+
+                    <div class="image-upload-grid" id="image-upload-grid">
+                        <label class="image-upload-add">
+                            + Add image
+                            <input type="file" id="image-input" accept="image/*" multiple hidden>
+                        </label>
+                    </div>
+
+                </section>
+
+
+                <section class="form-card">
+
+                    <div class="form-section-title">Cancellation</div>
+
+                    <p class="form-section-subtitle" id="cancel-note"></p>
+
+                    <button type="button" id="cancel-project-button" class="button-danger button-full" hidden>
+                        Cancel project
+                    </button>
+
+                </section>
+
+
+                <section class="form-card">
+
+                    <div class="form-section-title">Danger zone</div>
+                    <p class="form-section-subtitle">
+                        Deleting a project permanently removes it and cannot be undone.
+                    </p>
+
+                    <button type="button" id="delete-project-button" class="button-danger button-full">
+                        Delete project
+                    </button>
+
+                </section>
+
+            </div>
+
+        </div>
+    </main>
+
+
+    <script src="app.js"></script>
+    <script src="projects-common.js"></script>
+    <script src="edit-project.js"></script>
+
+</body>
+</html>
