@@ -6,11 +6,13 @@ from rest_framework.response import Response
 
 from .models import User
 from .serializers import (
+    DeleteAccountSerializer,
     ForgotPasswordSerializer,
     LoginSerializer,
     LogoutSerializer,
     RegisterSerializer,
     ResetPasswordSerializer,
+    UserProfileSerializer,
 )
 from .services import (
     send_activation_email,
@@ -23,21 +25,10 @@ from .tokens import (
 
 
 class RegisterView(generics.CreateAPIView):
-    """
-    API endpoint for creating a new user account.
-
-    After successful registration, an activation email is sent
-    to the user's email address.
-    """
-
     serializer_class = RegisterSerializer
     permission_classes = [AllowAny]
 
     def perform_create(self, serializer):
-        """
-        Create the user and send the activation email.
-        """
-
         user = serializer.save()
 
         send_activation_email(
@@ -47,20 +38,10 @@ class RegisterView(generics.CreateAPIView):
 
 
 class LoginView(generics.GenericAPIView):
-    """
-    API endpoint for authenticating a user using email and password.
-
-    Returns access and refresh JWT tokens after successful authentication.
-    """
-
     serializer_class = LoginSerializer
     permission_classes = [AllowAny]
 
     def post(self, request, *args, **kwargs):
-        """
-        Authenticate the user and return JWT tokens.
-        """
-
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
@@ -75,20 +56,10 @@ class LoginView(generics.GenericAPIView):
 
 
 class LogoutView(generics.GenericAPIView):
-    """
-    API endpoint for logging out an authenticated user.
-
-    The provided refresh token is blacklisted so it cannot be used again.
-    """
-
     serializer_class = LogoutSerializer
     permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
-        """
-        Blacklist the user's refresh token.
-        """
-
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -102,18 +73,9 @@ class LogoutView(generics.GenericAPIView):
 
 
 class ActivateAccountView(generics.GenericAPIView):
-    """
-    API endpoint for activating a user account through
-    the email verification token.
-    """
-
     permission_classes = [AllowAny]
 
     def get(self, request, token):
-        """
-        Verify the activation token and activate the account.
-        """
-
         user_id = verify_activation_token(token)
 
         if not user_id:
@@ -124,7 +86,10 @@ class ActivateAccountView(generics.GenericAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        user = get_object_or_404(User, pk=user_id)
+        user = get_object_or_404(
+            User,
+            pk=user_id,
+        )
 
         if user.is_email_verified:
             return Response(
@@ -154,22 +119,10 @@ class ActivateAccountView(generics.GenericAPIView):
 
 
 class ForgotPasswordView(generics.GenericAPIView):
-    """
-    API endpoint for requesting a password-reset email.
-
-    The endpoint always returns the same response so that it does not
-    reveal whether a particular email address is registered.
-    """
-
     serializer_class = ForgotPasswordSerializer
     permission_classes = [AllowAny]
 
     def post(self, request, *args, **kwargs):
-        """
-        Accept an email address and send a password-reset email
-        when the account exists.
-        """
-
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
@@ -193,19 +146,10 @@ class ForgotPasswordView(generics.GenericAPIView):
 
 
 class ResetPasswordView(generics.GenericAPIView):
-    """
-    API endpoint for resetting a user's password using a valid
-    password-reset token.
-    """
-
     serializer_class = ResetPasswordSerializer
     permission_classes = [AllowAny]
 
     def post(self, request, uid, token, *args, **kwargs):
-        """
-        Validate the password-reset token and set a new password.
-        """
-
         user = get_object_or_404(
             User,
             pk=uid,
@@ -244,6 +188,59 @@ class ResetPasswordView(generics.GenericAPIView):
         return Response(
             {
                 "detail": "Your password has been reset successfully."
+            },
+            status=status.HTTP_200_OK,
+        )
+
+
+class UserProfileView(
+    generics.RetrieveUpdateAPIView
+):
+    serializer_class = UserProfileSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user
+
+
+class DeleteAccountView(
+    generics.GenericAPIView
+):
+    serializer_class = DeleteAccountSerializer
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(
+            data=request.data,
+            context={
+                "request": request,
+            },
+        )
+
+        serializer.is_valid(
+            raise_exception=True
+        )
+
+        user = request.user
+
+        refresh_token = request.data.get("refresh")
+
+        if refresh_token:
+            try:
+                from rest_framework_simplejwt.tokens import RefreshToken
+
+                RefreshToken(
+                    refresh_token
+                ).blacklist()
+
+            except Exception:
+                pass
+
+        user.delete()
+
+        return Response(
+            {
+                "detail": "Your account has been deleted successfully."
             },
             status=status.HTTP_200_OK,
         )

@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>My Profile — CrowdFund</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css?v=6"
+    >
+
+    <script
+        src="profile.js?v=2"
+        defer
+    ></script>
+</head>
+
+<body class="profile-page">
+
+<header class="site-header">
+
+    <div class="navbar">
+
+        <a
+            href="index.html"
+            class="brand"
+        >
+            <span class="brand-mark">
+                CF
+            </span>
+
+            <span class="brand-name">
+                CrowdFund
+            </span>
+        </a>
+
+
+        <div class="nav-actions">
+
+            <a
+                href="index.html"
+                class="button button-outline"
+            >
+                Home
+            </a>
+
+            <button
+                type="button"
+                id="profile-logout-button"
+                class="button button-dark"
+            >
+                Sign out
+            </button>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+<main class="profile-main">
+
+    <div class="profile-container">
+
+        <section class="profile-hero">
+
+            <div class="profile-hero-copy">
+
+                <p class="hero-kicker">
+                    My profile
+                </p>
+
+                <h1>
+                    Your crowd.
+                    <span>Your impact.</span>
+                </h1>
+
+                <p class="profile-subtitle">
+                    Keep your information current and manage
+                    your CrowdFund account in one place.
+                </p>
+
+            </div>
+
+
+            <div class="profile-avatar-wrap">
+
+                <div
+                    id="profile-avatar"
+                    class="profile-avatar"
+                >
+                    U
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <div
+            id="profile-alert"
+            class="form-alert"
+            hidden
+        ></div>
+
+
+        <section class="profile-grid">
+
+            <div class="profile-card profile-card-large">
+
+                <div class="profile-card-header">
+
+                    <div>
+
+                        <p class="profile-card-kicker">
+                            Account details
+                        </p>
+
+                        <h2>
+                            Personal information
+                        </h2>
+
+                    </div>
+
+                    <span class="profile-status">
+                        Active
+                    </span>
+
+                </div>
+
+
+                <form
+                    id="profile-form"
+                    class="auth-form"
+                    novalidate
+                >
+
+                    <div class="form-row">
+
+                        <div class="form-group">
+
+                            <label for="first-name">
+                                First name
+                            </label>
+
+                            <input
+                                type="text"
+                                id="first-name"
+                                required
+                            >
+
+                            <small
+                                id="first-name-error"
+                                class="field-error"
+                            ></small>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="last-name">
+                                Last name
+                            </label>
+
+                            <input
+                                type="text"
+                                id="last-name"
+                                required
+                            >
+
+                            <small
+                                id="last-name-error"
+                                class="field-error"
+                            ></small>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="email">
+                            Email address
+                        </label>
+
+                        <input
+                            type="email"
+                            id="email"
+                            readonly
+                        >
+
+                        <small class="input-hint">
+                            Email cannot be changed.
+                        </small>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="phone-number">
+                            Egyptian mobile number
+                        </label>
+
+                        <input
+                            type="tel"
+                            id="phone-number"
+                            maxlength="11"
+                            inputmode="numeric"
+                            required
+                        >
+
+                        <small
+                            id="phone-number-error"
+                            class="field-error"
+                        ></small>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="profile-picture">
+                            Profile picture
+                        </label>
+
+                        <input
+                            type="file"
+                            id="profile-picture"
+                            accept="image/*"
+                        >
+
+                        <small
+                            id="profile-picture-error"
+                            class="field-error"
+                        ></small>
+
+                    </div>
+
+
+                    <div class="form-row">
+
+                        <div class="form-group">
+
+                            <label for="birthdate">
+                                Birthdate
+                            </label>
+
+                            <input
+                                type="date"
+                                id="birthdate"
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="country">
+                                Country
+                            </label>
+
+                            <input
+                                type="text"
+                                id="country"
+                                placeholder="Egypt"
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="facebook-profile">
+                            Facebook profile
+                        </label>
+
+                        <input
+                            type="url"
+                            id="facebook-profile"
+                            placeholder="https://facebook.com/yourprofile"
+                        >
+
+                        <small
+                            id="facebook-profile-error"
+                            class="field-error"
+                        ></small>
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        id="profile-save-button"
+                        class="button button-coral auth-submit"
+                    >
+                        Save changes
+                    </button>
+
+                </form>
+
+            </div>
+
+
+            <aside class="profile-side">
+
+                <div class="profile-card">
+
+                    <p class="profile-card-kicker">
+                        Your journey
+                    </p>
+
+                    <h2>
+                        Activity
+                    </h2>
+
+                    <div class="profile-linked-section">
+
+                        <div class="profile-linked-header">
+                            <strong>
+                                Your projects
+                            </strong>
+
+                            <span>
+                                Coming soon
+                            </span>
+                        </div>
+
+                        <p>
+                            Your created projects will appear here
+                            when the Projects module is connected.
+                        </p>
+
+                    </div>
+
+
+                    <div class="profile-linked-section">
+
+                        <div class="profile-linked-header">
+                            <strong>
+                                Your donations
+                            </strong>
+
+                            <span>
+                                Coming soon
+                            </span>
+                        </div>
+
+                        <p>
+                            Your donation history will appear here
+                            when the Donations module is connected.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="profile-card profile-danger-card">
+
+                    <p class="profile-card-kicker">
+                        Account
+                    </p>
+
+                    <h2>
+                        Delete account
+                    </h2>
+
+                    <p class="profile-side-text">
+                        This action is permanent. You will need to
+                        confirm your password before your account
+                        can be deleted.
+                    </p>
+
+                    <button
+                        type="button"
+                        id="delete-account-button"
+                        class="button button-outline"
+                    >
+                        Delete my account
+                    </button>
+
+                </div>
+
+            </aside>
+
+        </section>
+
+    </div>
+
+</main>
+
+
+<div
+    id="delete-modal"
+    class="profile-modal"
+    hidden
+>
+
+    <div
+        class="profile-modal-backdrop"
+        data-close-delete-modal
+    ></div>
+
+
+    <div
+        class="profile-modal-card"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="delete-modal-title"
+    >
+
+        <button
+            type="button"
+            class="profile-modal-close"
+            id="close-delete-modal"
+            aria-label="Close"
+        >
+            ×
+        </button>
+
+        <p class="profile-card-kicker">
+            Permanent action
+        </p>
+
+        <h2 id="delete-modal-title">
+            Delete your account?
+        </h2>
+
+        <p>
+            This cannot be undone. Enter your current password
+            to confirm that you want to permanently delete
+            your CrowdFund account.
+        </p>
+
+
+        <form
+            id="delete-account-form"
+            class="auth-form"
+            novalidate
+        >
+
+            <div class="form-group">
+
+                <label for="delete-password">
+                    Current password
+                </label>
+
+                <input
+                    type="password"
+                    id="delete-password"
+                    autocomplete="current-password"
+                    required
+                >
+
+                <small
+                    id="delete-password-error"
+                    class="field-error"
+                ></small>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="delete-confirm-password">
+                    Confirm password
+                </label>
+
+                <input
+                    type="password"
+                    id="delete-confirm-password"
+                    autocomplete="current-password"
+                    required
+                >
+
+                <small
+                    id="delete-confirm-password-error"
+                    class="field-error"
+                ></small>
+
+            </div>
+
+
+            <button
+                type="submit"
+                id="confirm-delete-button"
+                class="button button-coral auth-submit"
+            >
+                Permanently delete account
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+</body>
+</html>

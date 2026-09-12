@@ -10,12 +10,6 @@ from .validators import validate_egyptian_mobile
 
 
 class RegisterSerializer(serializers.ModelSerializer):
-    """
-    Serializer responsible for validating and creating a new user account.
-
-    The account remains inactive until email verification is completed.
-    """
-
     password = serializers.CharField(
         write_only=True,
         min_length=8,
@@ -29,7 +23,6 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-
         fields = [
             "first_name",
             "last_name",
@@ -92,10 +85,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         return value
 
     def validate(self, attrs):
-        password = attrs.get("password")
-        confirm_password = attrs.get("confirm_password")
-
-        if password != confirm_password:
+        if attrs.get("password") != attrs.get("confirm_password"):
             raise serializers.ValidationError(
                 {
                     "confirm_password": "Passwords do not match."
@@ -121,14 +111,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
 
 class LoginSerializer(serializers.Serializer):
-    """
-    Serializer responsible for authenticating users using
-    email and password and returning JWT tokens.
-    """
-
-    email = serializers.EmailField(
-        required=True,
-    )
+    email = serializers.EmailField(required=True)
 
     password = serializers.CharField(
         write_only=True,
@@ -178,10 +161,6 @@ class LoginSerializer(serializers.Serializer):
 
 
 class LogoutSerializer(serializers.Serializer):
-    """
-    Serializer responsible for invalidating a user's refresh token.
-    """
-
     refresh = serializers.CharField(
         required=True,
         write_only=True,
@@ -212,17 +191,7 @@ class LogoutSerializer(serializers.Serializer):
 
 
 class ForgotPasswordSerializer(serializers.Serializer):
-    """
-    Serializer responsible for accepting an email address and
-    initiating the password-reset flow.
-
-    The API intentionally returns the same response whether the
-    email exists or not to avoid exposing registered accounts.
-    """
-
-    email = serializers.EmailField(
-        required=True,
-    )
+    email = serializers.EmailField(required=True)
 
     def validate_email(self, value):
         return value.strip().lower()
@@ -231,22 +200,15 @@ class ForgotPasswordSerializer(serializers.Serializer):
         email = self.validated_data["email"]
 
         try:
-            user = User.objects.get(
-                email__iexact=email,
-            )
+            user = User.objects.get(email__iexact=email)
         except User.DoesNotExist:
             return None
 
         self.user = user
-
         return user
 
 
 class ResetPasswordSerializer(serializers.Serializer):
-    """
-    Serializer responsible for validating and setting a new password.
-    """
-
     new_password = serializers.CharField(
         write_only=True,
         min_length=8,
@@ -267,13 +229,119 @@ class ResetPasswordSerializer(serializers.Serializer):
         return value
 
     def validate(self, attrs):
-        new_password = attrs.get("new_password")
-        confirm_password = attrs.get("confirm_password")
-
-        if new_password != confirm_password:
+        if attrs.get("new_password") != attrs.get("confirm_password"):
             raise serializers.ValidationError(
                 {
                     "confirm_password": "Passwords do not match."
+                }
+            )
+
+        return attrs
+
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(read_only=True)
+
+    class Meta:
+        model = User
+
+        fields = [
+            "id",
+            "first_name",
+            "last_name",
+            "email",
+            "phone_number",
+            "profile_picture",
+            "birthdate",
+            "facebook_profile",
+            "country",
+            "created_at",
+            "updated_at",
+        ]
+
+        read_only_fields = [
+            "id",
+            "email",
+            "created_at",
+            "updated_at",
+        ]
+
+        extra_kwargs = {
+            "first_name": {
+                "required": True,
+                "allow_blank": False,
+            },
+            "last_name": {
+                "required": True,
+                "allow_blank": False,
+            },
+            "phone_number": {
+                "required": True,
+                "allow_blank": False,
+            },
+            "profile_picture": {
+                "required": False,
+                "allow_null": True,
+            },
+            "birthdate": {
+                "required": False,
+                "allow_null": True,
+            },
+            "facebook_profile": {
+                "required": False,
+                "allow_null": True,
+                "allow_blank": True,
+            },
+            "country": {
+                "required": False,
+                "allow_null": True,
+                "allow_blank": True,
+            },
+        }
+
+    def validate_phone_number(self, value):
+        value = validate_egyptian_mobile(value)
+
+        if (
+            User.objects
+            .filter(phone_number=value)
+            .exclude(pk=self.instance.pk)
+            .exists()
+        ):
+            raise serializers.ValidationError(
+                "An account with this phone number already exists."
+            )
+
+        return value
+
+
+class DeleteAccountSerializer(serializers.Serializer):
+    password = serializers.CharField(
+        write_only=True,
+        style={"input_type": "password"},
+    )
+
+    confirm_password = serializers.CharField(
+        write_only=True,
+        style={"input_type": "password"},
+    )
+
+    def validate(self, attrs):
+        password = attrs.get("password")
+        confirm_password = attrs.get("confirm_password")
+        user = self.context["request"].user
+
+        if password != confirm_password:
+            raise serializers.ValidationError(
+                {
+                    "confirm_password": "Passwords do not match."
+                }
+            )
+
+        if not user.check_password(password):
+            raise serializers.ValidationError(
+                {
+                    "password": "Incorrect password."
                 }
             )
 
