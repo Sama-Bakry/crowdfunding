@@ -53,13 +53,19 @@ async function handleActivation() {
         decodeURIComponent(token).trim();
 
 
+    /*
+     * The user reaches this page automatically
+     * after successful registration.
+     *
+     * In that case there is no activation token yet,
+     * because the real token is inside the email.
+     */
     if (!token) {
-        showActivationError(
+        showWaitingForEmail(
             activationState,
             activationTitle,
             activationMessage,
-            activationActions,
-            "No activation token was found. Please open the activation link from your email again."
+            activationActions
         );
 
         return;
@@ -96,6 +102,7 @@ async function handleActivation() {
         try {
             data =
                 await response.json();
+
         } catch {
             data = null;
         }
@@ -155,6 +162,47 @@ async function handleActivation() {
 }
 
 
+/* =========================
+   WAITING FOR EMAIL
+========================= */
+
+function showWaitingForEmail(
+    state,
+    title,
+    message,
+    actions
+) {
+
+    state.classList.remove(
+        "activation-error",
+        "activation-success"
+    );
+
+
+    title.textContent =
+        "Check your email";
+
+
+    message.textContent =
+        "Your account was created successfully. We sent an activation link to your email address. Please open the email and click the activation link to activate your account.";
+
+
+    actions.innerHTML = `
+        <a
+            href="login.html"
+            class="button button-outline"
+        >
+            Back to login
+        </a>
+    `;
+
+}
+
+
+/* =========================
+   LOADING
+========================= */
+
 function setLoadingState(
     state,
     title,
@@ -181,6 +229,10 @@ function setLoadingState(
 }
 
 
+/* =========================
+   SUCCESS
+========================= */
+
 function showActivationSuccess(
     state,
     title,
@@ -204,20 +256,26 @@ function showActivationSuccess(
 
 
     message.textContent =
-        detail;
+        `${detail} Redirecting you to sign in...`;
 
 
-    actions.innerHTML = `
-        <a
-            href="login.html"
-            class="button button-coral"
-        >
-            Continue to login
-        </a>
-    `;
+    actions.innerHTML = "";
+
+
+    setTimeout(
+        () => {
+            window.location.href =
+                "login.html";
+        },
+        1500
+    );
 
 }
 
+
+/* =========================
+   ERROR
+========================= */
 
 function showActivationError(
     state,
