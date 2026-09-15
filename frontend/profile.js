@@ -12,6 +12,8 @@ const LOGOUT_API_URL =
 
 const DONATIONS_API_URL =
     "http://127.0.0.1:8000/api/interactions/donations/";
+const MY_PROJECTS_API_URL =
+    "http://127.0.0.1:8000/api/projects/my-projects/";
 
 
 document.addEventListener(
@@ -98,6 +100,7 @@ async function initializeProfile() {
 
     await loadProfile();
     await loadDonationHistory();
+    await loadMyProjects();
 }
 
 
@@ -1175,6 +1178,100 @@ async function loadDonationHistory() {
         container.innerHTML = `
             <p>
                 Unable to load your donation history.
+            </p>
+        `;
+    }
+}
+async function loadMyProjects() {
+
+    const container =
+        document.getElementById("profile-projects");
+
+    if (!container) {
+        return;
+    }
+
+    try {
+
+        const response =
+            await authorizedFetch(
+                MY_PROJECTS_API_URL,
+                {
+                    method: "GET",
+                }
+            );
+
+        const data =
+            await parseResponse(response);
+
+        if (response.status === 401) {
+            clearAuthAndRedirect();
+            return;
+        }
+
+        if (!response.ok) {
+
+            console.error(
+                "My projects error:",
+                data
+            );
+
+            container.innerHTML = `
+                <p>
+                    Unable to load your projects.
+                </p>
+            `;
+
+            return;
+        }
+
+        const projects =
+            Array.isArray(data)
+                ? data
+                : (data.results || []);
+
+        if (projects.length === 0) {
+
+            container.innerHTML = `
+                <p>
+                    You haven't created any projects yet.
+                </p>
+            `;
+
+            return;
+        }
+
+        container.innerHTML =
+            projects.map(
+                (project) => `
+                    <div class="profile-project-item">
+
+                        <strong>
+                            ${escapeHtml(
+                                project.title || "Untitled project"
+                            )}
+                        </strong>
+
+                        <span>
+                            EGP ${Number(
+                                project.target_amount || 0
+                            ).toLocaleString()}
+                        </span>
+
+                    </div>
+                `
+            ).join("");
+
+    } catch (error) {
+
+        console.error(
+            "My projects error:",
+            error
+        );
+
+        container.innerHTML = `
+            <p>
+                Unable to load your projects.
             </p>
         `;
     }

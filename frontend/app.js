@@ -274,12 +274,7 @@ function showLoggedInNavigation(
             )}
         </span>
 
-        <a
-            href="my-projects.html"
-            class="nav-login"
-        >
-            My projects
-        </a>
+        
 
         <a
             href="create-project.html"
