@@ -1,9 +1,7 @@
 "use strict";
 
-
 const REGISTER_API_URL =
     "http://127.0.0.1:8000/api/accounts/register/";
-
 
 let registerForm = null;
 let registerButton = null;
@@ -37,6 +35,7 @@ document.addEventListener(
 
 
         if (!registerForm) {
+
             console.error(
                 "Registration form was not found."
             );
@@ -65,6 +64,10 @@ document.addEventListener(
     }
 );
 
+
+/* =========================
+   SUBMIT
+========================= */
 
 async function handleRegisterSubmit(event) {
 
@@ -141,6 +144,7 @@ async function handleRegisterSubmit(event) {
             data
         );
 
+
     } catch (error) {
 
         console.error(
@@ -154,6 +158,7 @@ async function handleRegisterSubmit(event) {
             "error"
         );
 
+
     } finally {
 
         setLoadingState(
@@ -164,6 +169,10 @@ async function handleRegisterSubmit(event) {
 
 }
 
+
+/* =========================
+   COLLECT FORM DATA
+========================= */
 
 function collectFormData() {
 
@@ -279,6 +288,10 @@ function collectFormData() {
     return formData;
 }
 
+
+/* =========================
+   VALIDATION
+========================= */
 
 function validateRegisterForm(
     formData
@@ -444,6 +457,10 @@ function isValidEgyptianPhone(
 }
 
 
+/* =========================
+   API RESPONSE
+========================= */
+
 async function parseResponse(
     response
 ) {
@@ -478,6 +495,10 @@ async function parseResponse(
 
 }
 
+
+/* =========================
+   API ERRORS
+========================= */
 
 function handleApiErrors(
     data
@@ -584,10 +605,14 @@ function handleApiErrors(
 }
 
 
+/* =========================
+   SUCCESS
+========================= */
+
 function handleRegisterSuccess() {
 
     showAlert(
-        "Account created successfully. Please check your email to activate your account.",
+        "Account created successfully. Redirecting to account activation...",
         "success"
     );
 
@@ -595,15 +620,22 @@ function handleRegisterSuccess() {
     registerForm.reset();
 
 
-    window.scrollTo(
-        {
-            top: 0,
-            behavior: "smooth",
-        }
+    setTimeout(
+        () => {
+
+            window.location.href =
+                "activate.html";
+
+        },
+        1000
     );
 
 }
 
+
+/* =========================
+   FORM ERRORS
+========================= */
 
 function showFormErrors(
     errors
@@ -767,6 +799,10 @@ function clearFormErrors() {
 }
 
 
+/* =========================
+   ALERT
+========================= */
+
 function showAlert(
     message,
     type = "error"
@@ -778,6 +814,7 @@ function showAlert(
 
 
     registerAlert.hidden = false;
+
 
     registerAlert.textContent =
         message;
@@ -810,7 +847,9 @@ function hideAlert() {
 
     registerAlert.hidden = true;
 
+
     registerAlert.textContent = "";
+
 
     registerAlert.classList.remove(
         "success"
@@ -818,6 +857,10 @@ function hideAlert() {
 
 }
 
+
+/* =========================
+   LOADING
+========================= */
 
 function setLoadingState(
     isLoading
@@ -853,6 +896,10 @@ function setLoadingState(
 }
 
 
+/* =========================
+   PASSWORD TOGGLE
+========================= */
+
 function setupPasswordToggle(
     inputId,
     buttonId
@@ -874,6 +921,7 @@ function setupPasswordToggle(
         !input ||
         !button
     ) {
+
         return;
     }
 

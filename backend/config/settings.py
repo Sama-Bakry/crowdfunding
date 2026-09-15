@@ -1,5 +1,8 @@
+import os
 from pathlib import Path
 from datetime import timedelta
+
+from dotenv import load_dotenv
 
 
 # =========================================================
@@ -8,13 +11,17 @@ from datetime import timedelta
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Load .env from the project root:
+# D:\Documents\ITI\crowdfunding\.env
+load_dotenv(BASE_DIR.parent / ".env")
+
 
 # =========================================================
 # SECURITY
 # =========================================================
 
 SECRET_KEY = (
-    "django-insecure-g7(xtfyj5n^81uv@ipdwtq%3$fh^*z-"
+    "django-insecure-g7(xtfyj5n^81uv@ipdwtq%3$fh^*-"
     "pmup#*2cn!"
 )
 
@@ -190,13 +197,16 @@ MEDIA_ROOT = BASE_DIR / "media"
 # EMAIL
 # =========================================================
 
-EMAIL_BACKEND = (
-    "django.core.mail.backends.console.EmailBackend"
-)
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
-DEFAULT_FROM_EMAIL = (
-    "Crowdfunding <noreply@crowdfunding.local>"
-)
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 
 # =========================================================
