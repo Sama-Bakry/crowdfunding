@@ -1,5 +1,5 @@
 from django.utils import timezone
-
+from django.db.models import Avg
 from rest_framework import serializers
 
 from .models import Category, Project, ProjectImage, Tag
@@ -133,7 +133,7 @@ class ProjectListSerializer(serializers.ModelSerializer):
 
 class ProjectDetailSerializer(serializers.ModelSerializer):
   
-
+    average_rating = serializers.SerializerMethodField()
     owner = serializers.SerializerMethodField()
 
     is_owner = serializers.SerializerMethodField()
@@ -185,6 +185,7 @@ class ProjectDetailSerializer(serializers.ModelSerializer):
             "target_amount",
             "total_donations",
             "funding_progress",
+            "average_rating",
             "start_date",
             "end_date",
             "status",
@@ -200,6 +201,16 @@ class ProjectDetailSerializer(serializers.ModelSerializer):
             "first_name": obj.owner.first_name,
             "last_name": obj.owner.last_name,
         }
+    
+    def get_average_rating(self, obj):
+     average = obj.ratings.aggregate(
+        average=Avg("value")
+    )["average"]
+
+     if average is None:
+        return 0
+
+     return round(float(average), 2)
 
     def get_is_owner(self, obj):
         request = self.context.get("request")

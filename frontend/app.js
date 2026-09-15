@@ -274,12 +274,7 @@ function showLoggedInNavigation(
             )}
         </span>
 
-        <a
-            href="my-projects.html"
-            class="nav-login"
-        >
-            My projects
-        </a>
+        
 
         <a
             href="create-project.html"
@@ -426,73 +421,57 @@ async function handleNavigationLogout() {
    Generic API request
    ========================= */
 
-async function apiRequest(
-    endpoint,
-    options = {}
-) {
+async function apiRequest(endpoint, options = {}) {
 
-    const response =
-        await fetch(
-            `${API_BASE_URL}${endpoint}`,
-            {
-                ...options,
+    const headers = new Headers(options.headers || {});
 
-                headers: {
-                    Accept:
-                        "application/json",
+    headers.set("Accept", "application/json");
 
-                    ...(options.body
-                        ? {
-                            "Content-Type":
-                                "application/json",
-                        }
-                        : {}),
-
-                    ...(options.headers || {}),
-                },
-            }
+    /*
+     * Add Content-Type only when the request
+     * has a body and the body is not FormData.
+     */
+    if (
+        options.body &&
+        !(options.body instanceof FormData) &&
+        !headers.has("Content-Type")
+    ) {
+        headers.set(
+            "Content-Type",
+            "application/json"
         );
+    }
 
+    const response = await fetch(
+        `${API_BASE_URL}${endpoint}`,
+        {
+            ...options,
+            headers,
+        }
+    );
 
     let data = null;
 
-
     try {
-
-        data =
-            await response.json();
-
+        data = await response.json();
     } catch {
-
         data = null;
-
     }
-
 
     if (!response.ok) {
 
-        const error =
-            new Error(
-                "API request failed."
-            );
+        const error = new Error(
+            "API request failed."
+        );
 
-
-        error.status =
-            response.status;
-
-
-        error.data =
-            data;
-
+        error.status = response.status;
+        error.data = data;
 
         throw error;
     }
 
-
     return data;
 }
-
-
 /* =========================
    Auth helpers
    ========================= */

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
 
@@ -15,6 +16,10 @@
 </head>
 
 <body>
+
+    <!-- =========================
+         HEADER
+    ========================== -->
 
     <header class="site-header">
         <div class="container navbar">
@@ -34,83 +39,324 @@
     </header>
 
 
+    <!-- =========================
+         MAIN
+    ========================== -->
+
     <main class="page-main">
+
         <div class="container">
+
+            <!-- Loading -->
 
             <div id="detail-loading" class="loading-state">
                 Loading project...
             </div>
 
+
+            <!-- Error -->
+
             <div id="detail-error" class="empty-state" hidden>
+
                 <h3>Project not found</h3>
-                <p>This project may have been removed or the link is incorrect.</p>
-                <a href="projects.html" class="button button-outline" style="margin-top: 14px;">
+
+                <p>
+                    This project may have been removed or the link is incorrect.
+                </p>
+
+                <a
+                    href="projects.html"
+                    class="button button-outline"
+                    style="margin-top: 14px;"
+                >
                     Back to explore
                 </a>
+
             </div>
 
-            <div id="detail-content" class="project-detail-grid" hidden>
+
+            <!-- =========================
+                 PROJECT CONTENT
+            ========================== -->
+
+            <div
+                id="detail-content"
+                class="project-detail-grid"
+                hidden
+            >
+
+                <!-- =========================
+                     LEFT COLUMN
+                ========================== -->
 
                 <div>
 
-                    <div id="image-slider" class="image-slider" hidden>
-                        <div class="image-slider-main" id="image-slider-main"></div>
+                    <!-- IMAGE SLIDER -->
 
-                        <button type="button" class="image-slider-nav image-slider-prev" id="slider-prev" aria-label="Previous image">
+                    <div
+                        id="image-slider"
+                        class="image-slider"
+                        hidden
+                    >
+
+                        <div
+                            class="image-slider-main"
+                            id="image-slider-main"
+                        ></div>
+
+
+                        <button
+                            type="button"
+                            class="image-slider-nav image-slider-prev"
+                            id="slider-prev"
+                            aria-label="Previous image"
+                        >
                             &#8249;
                         </button>
 
-                        <button type="button" class="image-slider-nav image-slider-next" id="slider-next" aria-label="Next image">
+
+                        <button
+                            type="button"
+                            class="image-slider-nav image-slider-next"
+                            id="slider-next"
+                            aria-label="Next image"
+                        >
                             &#8250;
                         </button>
 
-                        <div class="image-slider-dots" id="slider-dots"></div>
+
+                        <div
+                            class="image-slider-dots"
+                            id="slider-dots"
+                        ></div>
+
                     </div>
 
-                    <div class="project-detail-header" id="detail-header"></div>
 
-                    <h1 class="project-detail-title" id="detail-title"></h1>
+                    <!-- PROJECT HEADER -->
 
-                    <p class="project-detail-owner" id="detail-owner"></p>
+                    <div
+                        class="project-detail-header"
+                        id="detail-header"
+                    ></div>
+
+
+                    <h1
+                        class="project-detail-title"
+                        id="detail-title"
+                    ></h1>
+
+
+                    <p
+                        class="project-detail-owner"
+                        id="detail-owner"
+                    ></p>
+
 
                     <div id="detail-tags"></div>
 
-                    <p class="project-detail-body" id="detail-body" style="margin-top: 18px;"></p>
+
+                    <p
+                        class="project-detail-body"
+                        id="detail-body"
+                        style="margin-top: 18px;"
+                    ></p>
+
+
+                    <!-- =========================
+                         RATING SECTION
+                    ========================== -->
+
+                    <section class="interaction-card">
+
+                        <div class="interaction-card-header">
+
+                            <div>
+
+                                <h2 class="interaction-title">
+                                    Project Rating
+                                </h2>
+
+                                <p class="interaction-subtitle">
+                                    See what people think about this project.
+                                </p>
+
+                            </div>
+
+
+                            <div
+                                id="rating-average"
+                                class="rating-average"
+                            >
+                                ★ 0.00
+                            </div>
+
+                        </div>
+
+
+                        <div id="rating-area"></div>
+
+                    </section>
+
+
+                    <!-- =========================
+                         COMMENTS SECTION
+                    ========================== -->
+
+                    <section class="interaction-card">
+
+                        <div class="interaction-card-header">
+
+                            <div>
+
+                                <h2 class="interaction-title">
+                                    Comments
+                                </h2>
+
+                                <p class="interaction-subtitle">
+                                    Share your thoughts about this project.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Add comment -->
+
+                        <div
+                            id="comment-form-area"
+                            class="comment-form-area"
+                        ></div>
+
+
+                        <!-- Comments -->
+
+                        <div
+                            id="comments-list"
+                            class="comments-list"
+                        ></div>
+
+                    </section>
+
+
+                    <!-- =========================
+                         REPORT PROJECT
+                    ========================== -->
+
+                    <section
+                        class="interaction-card report-card"
+                    >
+
+                        <div class="interaction-card-header">
+
+                            <div>
+
+                                <h2 class="interaction-title">
+                                    Report Project
+                                </h2>
+
+                                <p class="interaction-subtitle">
+                                    If you believe this project violates
+                                    the platform rules, you can report it.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div id="project-report-area"></div>
+
+                    </section>
 
                 </div>
 
 
+                <!-- =========================
+                     RIGHT SIDEBAR
+                ========================== -->
+
                 <aside>
+
+                    <!-- FUNDING CARD -->
 
                     <div class="funding-card">
 
-                        <div class="funding-amount" id="funding-raised"></div>
-                        <div class="funding-target" id="funding-target"></div>
+                        <div
+                            class="funding-amount"
+                            id="funding-raised"
+                        ></div>
+
+
+                        <div
+                            class="funding-target"
+                            id="funding-target"
+                        ></div>
+
 
                         <div id="funding-progress-bar"></div>
 
+
                         <div class="funding-dates">
+
                             <span id="funding-start"></span>
+
                             <span id="funding-end"></span>
+
                         </div>
 
-                        <div class="funding-actions" id="funding-actions"></div>
+
+                        <!-- DONATION AREA -->
+
+                        <div
+                            class="funding-actions"
+                            id="funding-actions"
+                        ></div>
 
                     </div>
 
-                    <div class="funding-card" id="owner-actions-card" hidden>
-                        <div class="form-section-title">Manage this project</div>
+
+                    <!-- OWNER ACTIONS -->
+
+                    <div
+                        class="funding-card"
+                        id="owner-actions-card"
+                        hidden
+                    >
+
+                        <div class="form-section-title">
+                            Manage this project
+                        </div>
+
+
                         <div class="funding-actions">
-                            <a href="#" id="edit-project-link" class="button button-outline button-full">
+
+                            <a
+                                href="#"
+                                id="edit-project-link"
+                                class="button button-outline button-full"
+                            >
                                 Edit project
                             </a>
 
-                            <button type="button" id="cancel-project-button" class="button-danger button-full">
+
+                            <button
+                                type="button"
+                                id="cancel-project-button"
+                                class="button-danger button-full"
+                            >
                                 Cancel project
                             </button>
 
-                            <p class="field-error" id="cancel-project-note"></p>
+
+                            <p
+                                class="field-error"
+                                id="cancel-project-note"
+                            ></p>
+
                         </div>
+
                     </div>
 
                 </aside>
@@ -118,12 +364,18 @@
             </div>
 
         </div>
+
     </main>
 
+
+    <!-- =========================
+         SCRIPTS
+    ========================== -->
 
     <script src="app.js"></script>
     <script src="projects-common.js"></script>
     <script src="project-details.js"></script>
 
 </body>
+
 </html>

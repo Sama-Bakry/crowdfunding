@@ -3400,6 +3400,7 @@ body {
 
 .profile-danger-card {
     border-color: rgba(233, 103, 77, .24);
+    margin-top: 20px;
 }
 
 .profile-modal {

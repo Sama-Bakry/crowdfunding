@@ -6,50 +6,105 @@
    ========================= */
 
 function requireAuthOrRedirect() {
-
-    const accessToken =
-        getAccessToken();
+    const accessToken = getAccessToken();
 
     if (!accessToken) {
-
-        window.location.href =
-            "login.html";
-
+        console.warn("No access token found. Redirecting to login.");
+        window.location.href = "login.html";
         return null;
     }
 
+    console.log("Authenticated user. Access token found.");
+
     return accessToken;
 }
-
-
 /* =========================
    Authenticated API request
    ========================= */
 
 async function authApiRequest(endpoint, options = {}) {
+  const accessToken = getAccessToken();
 
-    const accessToken =
-        getAccessToken();
+  if (!accessToken) {
+    throw new Error("Authentication required.");
+  }
 
-    const headers = {
-        ...(options.headers || {}),
-    };
+  const makeRequest = async (token) => {
+    const headers = new Headers(options.headers || {});
 
-    if (accessToken) {
-        headers.Authorization =
-            `Bearer ${accessToken}`;
+    headers.set("Authorization", `Bearer ${token}`);
+
+    return apiRequest(endpoint, {
+      ...options,
+      headers,
+    });
+  };
+
+  try {
+    return await makeRequest(accessToken);
+
+  } catch (error) {
+
+    /*
+     * If the access token is expired,
+     * try to refresh it.
+     */
+
+    if (error.status !== 401) {
+      throw error;
     }
 
-    return apiRequest(
-        endpoint,
+    const refreshToken = getRefreshToken();
+
+    if (!refreshToken) {
+      clearAuthTokens();
+      throw error;
+    }
+
+    try {
+
+      const response = await apiRequest(
+        "/accounts/token/refresh/",
         {
-            ...options,
-            headers,
+          method: "POST",
+
+          body: JSON.stringify({
+            refresh: refreshToken,
+          }),
         }
-    );
+      );
+
+      if (!response.access) {
+        clearAuthTokens();
+        throw error;
+      }
+
+      /*
+       * Save the new access token.
+       */
+
+      saveAccessToken(response.access);
+
+      /*
+       * Retry the original request
+       * with the new access token.
+       */
+
+      return await makeRequest(response.access);
+
+    } catch (refreshError) {
+
+      console.error(
+        "Token refresh failed:",
+        refreshError
+      );
+
+      clearAuthTokens();
+
+      throw error;
+    }
+  }
 }
-
-
 
 
 async function authMultipartRequest(endpoint, formData, method = "POST") {
@@ -96,7 +151,22 @@ async function authMultipartRequest(endpoint, formData, method = "POST") {
    ========================= */
 
 async function fetchCategories() {
-    return apiRequest("/projects/categories/");
+
+    const data = await apiRequest("/projects/categories/");
+
+    // The API may return either:
+    // 1. A plain array
+    // 2. A paginated response containing "results"
+
+    if (Array.isArray(data)) {
+        return data;
+    }
+
+    if (data && Array.isArray(data.results)) {
+        return data.results;
+    }
+
+    return [];
 }
 
 

@@ -10,6 +10,11 @@ const DELETE_ACCOUNT_API_URL =
 const LOGOUT_API_URL =
     "http://127.0.0.1:8000/api/accounts/logout/";
 
+const DONATIONS_API_URL =
+    "http://127.0.0.1:8000/api/interactions/donations/";
+const MY_PROJECTS_API_URL =
+    "http://127.0.0.1:8000/api/projects/my-projects/";
+
 
 document.addEventListener(
     "DOMContentLoaded",
@@ -94,6 +99,8 @@ async function initializeProfile() {
 
 
     await loadProfile();
+    await loadDonationHistory();
+    await loadMyProjects();
 }
 
 
@@ -1077,4 +1084,195 @@ function clearAuthAndRedirect() {
 
     window.location.href =
         "login.html";
+}
+
+async function loadDonationHistory() {
+
+    const container =
+        document.getElementById("donations-history");
+
+    if (!container) {
+        return;
+    }
+
+    try {
+
+        const response =
+            await authorizedFetch(
+                DONATIONS_API_URL,
+                {
+                    method: "GET",
+                }
+            );
+
+        const data =
+            await parseResponse(response);
+
+        if (response.status === 401) {
+            clearAuthAndRedirect();
+            return;
+        }
+
+        if (!response.ok) {
+
+            console.error(
+                "Donation history error:",
+                data
+            );
+
+            container.innerHTML = `
+                <p>
+                    Unable to load your donation history.
+                </p>
+            `;
+
+            return;
+        }
+
+        const donations =
+            Array.isArray(data)
+                ? data
+                : (data.results || []);
+
+        if (donations.length === 0) {
+
+            container.innerHTML = `
+                <p>
+                    You haven't made any donations yet.
+                </p>
+            `;
+
+            return;
+        }
+
+        container.innerHTML =
+            donations.map(
+                (donation) => `
+                    <div class="donation-item">
+
+                        <strong>
+                            Project #${donation.project}
+                        </strong>
+
+                        <span>
+                            ${donation.amount} EGP
+                        </span>
+
+                        <small>
+                            ${new Date(
+                                donation.created_at
+                            ).toLocaleDateString()}
+                        </small>
+
+                    </div>
+                `
+            ).join("");
+
+    } catch (error) {
+
+        console.error(
+            "Donation history error:",
+            error
+        );
+
+        container.innerHTML = `
+            <p>
+                Unable to load your donation history.
+            </p>
+        `;
+    }
+}
+async function loadMyProjects() {
+
+    const container =
+        document.getElementById("profile-projects");
+
+    if (!container) {
+        return;
+    }
+
+    try {
+
+        const response =
+            await authorizedFetch(
+                MY_PROJECTS_API_URL,
+                {
+                    method: "GET",
+                }
+            );
+
+        const data =
+            await parseResponse(response);
+
+        if (response.status === 401) {
+            clearAuthAndRedirect();
+            return;
+        }
+
+        if (!response.ok) {
+
+            console.error(
+                "My projects error:",
+                data
+            );
+
+            container.innerHTML = `
+                <p>
+                    Unable to load your projects.
+                </p>
+            `;
+
+            return;
+        }
+
+        const projects =
+            Array.isArray(data)
+                ? data
+                : (data.results || []);
+
+        if (projects.length === 0) {
+
+            container.innerHTML = `
+                <p>
+                    You haven't created any projects yet.
+                </p>
+            `;
+
+            return;
+        }
+
+        container.innerHTML =
+            projects.map(
+                (project) => `
+                    <div class="profile-project-item">
+
+                        <strong>
+                            ${escapeHtml(
+                                project.title || "Untitled project"
+                            )}
+                        </strong>
+
+                        <span>
+                            EGP ${Number(
+                                project.target_amount || 0
+                            ).toLocaleString()}
+                        </span>
+
+                    </div>
+                `
+            ).join("");
+
+    } catch (error) {
+
+        console.error(
+            "My projects error:",
+            error
+        );
+
+        container.innerHTML = `
+            <p>
+                Unable to load your projects.
+            </p>
+        `;
+    }
 }
