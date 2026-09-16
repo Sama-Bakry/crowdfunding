@@ -11,6 +11,7 @@ from .views import (
     RatingListCreateView,
     ReportDetailView,
     ReportListCreateView,
+    AdminReportListView,
 )
 
 
@@ -71,5 +72,10 @@ urlpatterns = [
         "reports/<int:pk>/",
         ReportDetailView.as_view(),
         name="report-detail",
+    ),
+    path(
+        "admin/reports/",
+        AdminReportListView.as_view(),
+        name="admin-report-list",
     ),
 ]

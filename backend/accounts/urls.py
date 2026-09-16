@@ -9,6 +9,8 @@ from .views import (
     RegisterView,
     ResetPasswordView,
     UserProfileView,
+    AdminUserListView,
+    AdminUserDeleteView,
 )
 
 
@@ -67,5 +69,15 @@ urlpatterns = [
         "token/refresh/",
         TokenRefreshView.as_view(),
         name="token_refresh",
+    ),
+    path(
+        "admin/users/",
+        AdminUserListView.as_view(),
+        name="admin-user-list",
+    ),
+    path(
+        "admin/users/<int:pk>/",
+        AdminUserDeleteView.as_view(),
+        name="admin-user-delete",
     ),
 ]

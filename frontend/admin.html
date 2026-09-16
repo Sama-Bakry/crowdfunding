@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard — CrowdFund</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="projects.css">
+    <style>
+        .admin-container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 30px;
+            margin-top: 40px;
+            margin-bottom: 60px;
+        }
+        .admin-sidebar {
+            background: #fff;
+            border: 1px solid #eaeaea;
+            border-radius: 8px;
+            padding: 20px 0;
+            align-self: start;
+        }
+        .admin-nav-item {
+            display: block;
+            padding: 12px 20px;
+            color: #555;
+            text-decoration: none;
+            font-weight: 500;
+            border-left: 4px solid transparent;
+        }
+        .admin-nav-item:hover {
+            background: #f9f9f9;
+            color: #1a1a1a;
+        }
+        .admin-nav-item.active {
+            border-left-color: #ff6b6b;
+            color: #ff6b6b;
+            background: #fff0f0;
+        }
+        .admin-content {
+            background: #fff;
+            border: 1px solid #eaeaea;
+            border-radius: 8px;
+            padding: 30px;
+        }
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .admin-table th, .admin-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #eaeaea;
+        }
+        .admin-table th {
+            font-weight: 600;
+            color: #555;
+            background: #f9f9f9;
+        }
+        .admin-table tr:hover {
+            background: #f9f9f9;
+        }
+        .admin-actions {
+            display: flex;
+            gap: 10px;
+        }
+        .admin-btn {
+            padding: 6px 12px;
+            font-size: 0.85rem;
+            border-radius: 4px;
+            cursor: pointer;
+            border: none;
+            font-weight: 500;
+        }
+        .btn-danger {
+            background: #ffe3e3;
+            color: #e03131;
+        }
+        .btn-danger:hover { background: #ffc9c9; }
+        .btn-success {
+            background: #d3f9d8;
+            color: #2b8a3e;
+        }
+        .btn-success:hover { background: #b2f2bb; }
+        .btn-primary {
+            background: #e7f5ff;
+            color: #1971c2;
+        }
+        .btn-primary:hover { background: #d0ebff; }
+        
+        .section-panel { display: none; }
+        .section-panel.active { display: block; }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <div class="container navbar">
+            <a href="index.html" class="brand">
+                <span class="brand-mark">CF</span>
+                <span class="brand-name">CrowdFund</span>
+            </a>
+            <nav class="main-nav">
+                <a href="projects.html">Explore</a>
+                <a href="admin.html" class="active">Admin Dashboard</a>
+            </nav>
+            <div class="nav-actions" id="nav-actions"></div>
+        </div>
+    </header>
+
+    <main class="page-main">
+        <div class="container">
+            <div class="page-header">
+                <div>
+                    <h1>Admin Dashboard</h1>
+                    <p>Manage users, projects, categories, and reports.</p>
+                </div>
+            </div>
+
+            <div class="admin-container" id="admin-container" hidden>
+                <aside class="admin-sidebar">
+                    <a href="#" class="admin-nav-item active" data-target="users">Manage Users</a>
+                    <a href="#" class="admin-nav-item" data-target="projects">Manage Projects</a>
+                    <a href="#" class="admin-nav-item" data-target="categories">Manage Categories</a>
+                    <a href="#" class="admin-nav-item" data-target="reports">Review Reports</a>
+                </aside>
+
+                <div class="admin-content">
+                    <!-- Users Section -->
+                    <div id="section-users" class="section-panel active">
+                        <h2>Users</h2>
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="users-tbody">
+                                <tr><td colspan="5">Loading...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Projects Section -->
+                    <div id="section-projects" class="section-panel">
+                        <h2>Projects</h2>
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Title</th>
+                                    <th>Category</th>
+                                    <th>Status</th>
+                                    <th>Featured</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="projects-tbody">
+                                <tr><td colspan="6">Loading...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Categories Section -->
+                    <div id="section-categories" class="section-panel">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <h2>Categories</h2>
+                            <button id="add-category-btn" class="button button-coral button-small">Add Category</button>
+                        </div>
+                        <div id="add-category-form" hidden style="margin-top:15px; display:flex; gap:10px;">
+                            <input type="text" id="new-category-name" placeholder="Category Name" style="padding:8px; border:1px solid #ccc; border-radius:4px; flex:1;">
+                            <button id="save-category-btn" class="button button-coral button-small">Save</button>
+                            <button id="cancel-category-btn" class="button button-outline button-small">Cancel</button>
+                        </div>
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Slug</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="categories-tbody">
+                                <tr><td colspan="4">Loading...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Reports Section -->
+                    <div id="section-reports" class="section-panel">
+                        <h2>Reports</h2>
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Reporter</th>
+                                    <th>Type</th>
+                                    <th>Target ID</th>
+                                    <th>Reason</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="reports-tbody">
+                                <tr><td colspan="6">Loading...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="admin-error" class="empty-state" hidden>
+                <h3>Access Denied</h3>
+                <p>You must be an administrator to view this page.</p>
+                <a href="index.html" class="button button-outline" style="margin-top: 14px;">Back to Home</a>
+            </div>
+        </div>
+    </main>
+
+    <script src="app.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>

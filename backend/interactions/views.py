@@ -139,7 +139,7 @@ class CommentDetailView(generics.RetrieveUpdateDestroyAPIView):
     def update(self, request, *args, **kwargs):
         comment = self.get_object()
 
-        if comment.user_id != request.user.id:
+        if comment.user_id != request.user.id and not request.user.is_staff:
             return Response(
                 {
                     "detail": (
@@ -169,7 +169,7 @@ class CommentDetailView(generics.RetrieveUpdateDestroyAPIView):
     def destroy(self, request, *args, **kwargs):
         comment = self.get_object()
 
-        if comment.user_id != request.user.id:
+        if comment.user_id != request.user.id and not request.user.is_staff:
             return Response(
                 {
                     "detail": (
@@ -351,3 +351,19 @@ class ReportDetailView(generics.RetrieveAPIView):
                 "comment",
             )
         )
+
+class AdminReportListView(generics.ListAPIView):
+    serializer_class = ReportSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Report.objects.all().select_related(
+            "reporter",
+            "project",
+            "comment",
+        )
+
+    def check_permissions(self, request):
+        super().check_permissions(request)
+        if not request.user.is_staff:
+            self.permission_denied(request, message="You do not have permission to perform this action.")

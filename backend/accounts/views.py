@@ -246,3 +246,27 @@ class DeleteAccountView(
             },
             status=status.HTTP_200_OK,
         )
+
+
+class AdminUserListView(generics.ListAPIView):
+    queryset = User.objects.all().order_by('-date_joined')
+    serializer_class = UserProfileSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_permissions(self):
+        return [IsAuthenticated()]
+
+    def check_permissions(self, request):
+        super().check_permissions(request)
+        if not request.user.is_staff:
+            self.permission_denied(request, message="You do not have permission to perform this action.")
+
+
+class AdminUserDeleteView(generics.DestroyAPIView):
+    queryset = User.objects.all()
+    permission_classes = [IsAuthenticated]
+
+    def check_permissions(self, request):
+        super().check_permissions(request)
+        if not request.user.is_staff:
+            self.permission_denied(request, message="You do not have permission to perform this action.")

@@ -2,6 +2,19 @@
 
 document.addEventListener("DOMContentLoaded", () => {
     loadHomeData();
+
+    const searchForm = document.getElementById("hero-search-form");
+    if (searchForm) {
+        searchForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const query = document.getElementById("hero-search-input").value.trim();
+            if (query) {
+                window.location.href = `projects.html?search=${encodeURIComponent(query)}`;
+            } else {
+                window.location.href = 'projects.html';
+            }
+        });
+    }
 });
 
 async function loadHomeData() {
