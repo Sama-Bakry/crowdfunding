@@ -31,10 +31,12 @@ class RegisterView(generics.CreateAPIView):
     def perform_create(self, serializer):
         user = serializer.save()
 
-        send_activation_email(
-            user=user,
-            request=self.request,
-        )
+        # Auto‑activate for development (skip email verification)
+        user.is_active = True
+        user.is_email_verified = True
+        user.save(update_fields=["is_active", "is_email_verified"])
+        # Uncomment the line below to still send the activation email if needed
+        # send_activation_email(user=user, request=self.request)
 
 
 class LoginView(generics.GenericAPIView):

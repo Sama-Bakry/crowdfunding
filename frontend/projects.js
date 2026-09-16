@@ -3,6 +3,7 @@
 
 let currentPage = 1;
 let currentFilters = {
+    search: "",
     category: "",
     tag: "",
     ordering: "-created_at",
@@ -25,16 +26,25 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("ordering-filter")
         .addEventListener("change", handleFilterChange);
 
+    const searchInput = document.getElementById("search-filter");
+    if (searchInput) {
+        searchInput.value = currentFilters.search;
+        let searchDebounce = null;
+        searchInput.addEventListener("input", () => {
+            clearTimeout(searchDebounce);
+            searchDebounce = setTimeout(handleFilterChange, 350);
+        });
+    }
+
     const tagInput = document.getElementById("tag-filter");
-
-    tagInput.value = currentFilters.tag;
-
-    let tagDebounce = null;
-
-    tagInput.addEventListener("input", () => {
-        clearTimeout(tagDebounce);
-        tagDebounce = setTimeout(handleFilterChange, 350);
-    });
+    if (tagInput) {
+        tagInput.value = currentFilters.tag;
+        let tagDebounce = null;
+        tagInput.addEventListener("input", () => {
+            clearTimeout(tagDebounce);
+            tagDebounce = setTimeout(handleFilterChange, 350);
+        });
+    }
 
     document.getElementById("pagination-prev")
         .addEventListener("click", () => changePage(currentPage - 1));
@@ -49,6 +59,7 @@ function readFiltersFromUrl() {
 
     const params = new URLSearchParams(window.location.search);
 
+    currentFilters.search = params.get("search") || "";
     currentFilters.category = params.get("category") || "";
     currentFilters.tag = params.get("tag") || "";
     currentFilters.ordering = params.get("ordering") || "-created_at";
@@ -80,8 +91,12 @@ async function loadCategories() {
 
 function handleFilterChange() {
 
+    const searchInput = document.getElementById("search-filter");
+    if (searchInput) currentFilters.search = searchInput.value.trim();
+
     currentFilters.category = document.getElementById("category-filter").value;
-    currentFilters.tag = document.getElementById("tag-filter").value.trim();
+    const tagInput = document.getElementById("tag-filter");
+    if (tagInput) currentFilters.tag = tagInput.value.trim();
     currentFilters.ordering = document.getElementById("ordering-filter").value;
 
     changePage(1);
@@ -101,6 +116,7 @@ function updateUrl() {
 
     const params = new URLSearchParams();
 
+    if (currentFilters.search) params.set("search", currentFilters.search);
     if (currentFilters.category) params.set("category", currentFilters.category);
     if (currentFilters.tag) params.set("tag", currentFilters.tag);
     if (currentFilters.ordering) params.set("ordering", currentFilters.ordering);
@@ -130,6 +146,7 @@ async function loadProjects() {
 
     const params = new URLSearchParams();
 
+    if (currentFilters.search) params.set("search", currentFilters.search);
     if (currentFilters.category) params.set("category", currentFilters.category);
     if (currentFilters.tag) params.set("tag", currentFilters.tag);
     if (currentFilters.ordering) params.set("ordering", currentFilters.ordering);

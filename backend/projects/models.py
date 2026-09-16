@@ -3,7 +3,7 @@ from decimal import Decimal
 from django.conf import settings
 from django.core.validators import MinValueValidator
 from django.db import models
-from django.db.models import Sum
+from django.db.models import Avg, Sum
 from django.utils import timezone
 from django.utils.text import slugify
 
@@ -106,6 +106,10 @@ class Project(models.Model):
         default=False,
     )
 
+    is_featured = models.BooleanField(
+        default=False,
+    )
+
     cancelled_at = models.DateTimeField(
         blank=True,
         null=True,
@@ -137,6 +141,18 @@ class Project(models.Model):
         total = donations.aggregate(total=Sum("amount"))["total"]
 
         return total or Decimal("0.00")
+
+    @property
+    def average_rating(self):
+        """Calculates the average rating from related ratings."""
+        ratings = getattr(self, "ratings", None)
+
+        if ratings is None:
+            return Decimal("0.0")
+
+        avg = ratings.aggregate(avg=Avg("value"))["avg"]
+
+        return Decimal(str(round(avg, 1))) if avg is not None else Decimal("0.0")
 
     @property
     def funding_progress(self):

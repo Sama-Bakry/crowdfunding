@@ -15,10 +15,9 @@
         href="style.css?v=4"
     >
 
-    <script
-        src="app.js?v=4"
-        defer
-    ></script>
+    <script src="app.js?v=4" defer></script>
+    <script src="projects-common.js" defer></script>
+    <script src="home.js" defer></script>
 </head>
 
 <body>
@@ -286,157 +285,38 @@
              Discover
              ========================= -->
 
-        <section
-            class="section discover-section"
-            id="discover"
-        >
-
+        <section class="section discover-section" id="discover">
             <div class="section-heading">
-
                 <div>
-
-                    <p class="hero-kicker">
-                        Discover
-                    </p>
-
-                    <h2>
-                        Ideas people
-                        <span>care about.</span>
-                    </h2>
-
+                    <p class="hero-kicker">Highest Rated</p>
+                    <h2>Projects with <span>top ratings.</span></h2>
                 </div>
-
-                <p>
-                    Explore projects created by people
-                    building something meaningful.
-                </p>
-
             </div>
-
-
-            <div class="project-grid">
-
-                <article class="project-card">
-
-                    <div class="project-card-visual project-visual-one">
-
-                        <span class="project-category">
-                            Community
-                        </span>
-
-                    </div>
-
-                    <div class="project-card-body">
-
-                        <div class="project-card-meta">
-                            <span>Cairo</span>
-                            <span>72%</span>
-                        </div>
-
-                        <h3>
-                            Neighborhood makers hub
-                        </h3>
-
-                        <p>
-                            A shared creative space for local
-                            makers, learners, and young creators.
-                        </p>
-
-                        <div class="project-progress">
-                            <div class="progress-track">
-                                <div
-                                    class="progress-value"
-                                    style="width: 72%;"
-                                ></div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                </article>
-
-
-                <article class="project-card">
-
-                    <div class="project-card-visual project-visual-two">
-
-                        <span class="project-category">
-                            Education
-                        </span>
-
-                    </div>
-
-                    <div class="project-card-body">
-
-                        <div class="project-card-meta">
-                            <span>Alexandria</span>
-                            <span>61%</span>
-                        </div>
-
-                        <h3>
-                            Skills lab for young minds
-                        </h3>
-
-                        <p>
-                            Practical learning sessions designed
-                            around creativity, technology, and craft.
-                        </p>
-
-                        <div class="project-progress">
-                            <div class="progress-track">
-                                <div
-                                    class="progress-value"
-                                    style="width: 61%;"
-                                ></div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                </article>
-
-
-                <article class="project-card">
-
-                    <div class="project-card-visual project-visual-three">
-
-                        <span class="project-category">
-                            Sustainability
-                        </span>
-
-                    </div>
-
-                    <div class="project-card-body">
-
-                        <div class="project-card-meta">
-                            <span>Giza</span>
-                            <span>84%</span>
-                        </div>
-
-                        <h3>
-                            Community garden revival
-                        </h3>
-
-                        <p>
-                            Bringing neglected urban spaces back
-                            to life through shared gardens and workshops.
-                        </p>
-
-                        <div class="project-progress">
-                            <div class="progress-track">
-                                <div
-                                    class="progress-value"
-                                    style="width: 84%;"
-                                ></div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                </article>
-
+            <div id="highest-rated-grid" class="project-grid"></div>
+            
+            <div class="section-heading" style="margin-top: 60px;">
+                <div>
+                    <p class="hero-kicker">Latest</p>
+                    <h2>Newest <span>ideas.</span></h2>
+                </div>
             </div>
+            <div id="latest-projects-grid" class="project-grid"></div>
 
+            <div class="section-heading" style="margin-top: 60px;">
+                <div>
+                    <p class="hero-kicker">Featured</p>
+                    <h2>Spotlight <span>projects.</span></h2>
+                </div>
+            </div>
+            <div id="featured-projects-grid" class="project-grid"></div>
+
+            <div class="section-heading" style="margin-top: 60px;">
+                <div>
+                    <p class="hero-kicker">Categories</p>
+                    <h2>Explore by <span>topic.</span></h2>
+                </div>
+            </div>
+            <div id="categories-grid" class="project-grid" style="display: flex; gap: 20px; flex-wrap: wrap;"></div>
         </section>
 
 

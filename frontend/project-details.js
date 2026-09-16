@@ -69,12 +69,60 @@ async function loadProject(projectId) {
       loadAverageRating(project.id),
       loadRatings(project.id),
       loadComments(project.id),
+      loadSimilarProjects(project.id),
     ]);
   } catch (error) {
     console.error("Failed to load project:", error);
 
     showNotFound();
   }
+}
+
+/* =========================================================
+   LOAD SIMILAR PROJECTS
+========================================================= */
+
+async function loadSimilarProjects(projectId) {
+  try {
+    const data = await authApiRequest(`/projects/${projectId}/similar/`);
+    const container = document.getElementById("similar-projects-container");
+    const grid = document.getElementById("similar-projects-grid");
+    
+    if (data && data.length > 0) {
+        container.hidden = false;
+        // Limit to 4 similar projects
+        const projectsToShow = data.slice(0, 4);
+        grid.innerHTML = projectsToShow.map(renderSimilarProjectCard).join("");
+    } else {
+        container.hidden = true;
+    }
+  } catch (error) {
+    console.error("Failed to load similar projects:", error);
+  }
+}
+
+function renderSimilarProjectCard(project) {
+    const imageHtml = project.cover_image
+        ? `<img src="${project.cover_image}" alt="${escapeHtml(project.title)}">`
+        : escapeHtml(project.category ? project.category.name : "Project");
+
+    return `
+        <article class="project-card">
+            <a href="project-details.html?id=${project.id}" style="text-decoration: none; color: inherit; display: block;">
+                <div class="project-card-visual">
+                    ${imageHtml}
+                </div>
+                <div class="project-card-body">
+                    <div class="project-card-meta">
+                        <span>${escapeHtml(project.category ? project.category.name : "Uncategorized")}</span>
+                        ${statusBadgeHtml(project.status)}
+                    </div>
+                    <h3>${escapeHtml(project.title)}</h3>
+                    ${progressBarHtml(project.funding_progress)}
+                </div>
+            </a>
+        </article>
+    `;
 }
 
 /* =========================================================

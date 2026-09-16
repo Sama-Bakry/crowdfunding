@@ -587,19 +587,18 @@ function handleApiErrors(
 function handleRegisterSuccess() {
 
     showAlert(
-        "Account created successfully. Please check your email to activate your account.",
+        "Account created successfully. Redirecting you to sign in...",
         "success"
     );
 
 
     registerForm.reset();
 
-
-    window.scrollTo(
-        {
-            top: 0,
-            behavior: "smooth",
-        }
+    window.setTimeout(
+        () => {
+            window.location.href = "login.html";
+        },
+        900
     );
 
 }

@@ -30,11 +30,13 @@ class ProjectAdmin(admin.ModelAdmin):
         "category",
         "target_amount",
         "status",
+        "is_featured",
         "is_cancelled",
         "created_at",
     ]
 
-    list_filter = ["category", "is_cancelled"]
+    list_filter = ["category", "is_featured", "is_cancelled"]
+    list_editable = ["is_featured"]
     search_fields = ["title", "owner__email"]
     filter_horizontal = ["tags"]
     inlines = [ProjectImageInline]
