@@ -4,7 +4,7 @@ from decimal import Decimal
 from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
-
+from django.core.files.uploadedfile import SimpleUploadedFile
 from rest_framework import status
 from rest_framework.test import APIClient
 
@@ -307,4 +307,343 @@ class ProjectAPITests(TestCase):
         self.assertEqual(
             response.data["results"][0]["title"],
             "Solar Water Pump",
+        )
+    def test_search_projects_by_title(self):
+      Project.objects.create(
+        owner=self.other_user,
+        title="Clean Water Project",
+        details="Water project.",
+        category=self.category,
+        target_amount=Decimal("30000.00"),
+        start_date=timezone.localdate(),
+        end_date=timezone.localdate() + timedelta(days=10),
+      )
+
+      response = self.client.get(
+        reverse("projects:project-list"),
+        {"search": "Clean Water"},
+      )
+
+      self.assertEqual(
+        response.status_code,
+        status.HTTP_200_OK,
+      )
+
+      self.assertEqual(
+        response.data["count"],
+        1,
+      )
+
+      self.assertEqual(
+        response.data["results"][0]["title"],
+        "Clean Water Project",
+      )
+
+    def test_similar_projects_returns_same_category(self):
+      similar_project = Project.objects.create(
+        owner=self.other_user,
+        title="Another Technology Project",
+        details="Another project.",
+        category=self.category,
+        target_amount=Decimal("50000.00"),
+        start_date=timezone.localdate(),
+        end_date=timezone.localdate() + timedelta(days=20),
+     )
+
+      response = self.client.get(
+        reverse(
+            "projects:project-similar",
+            args=[self.project.id],
+        )
+      )
+
+      self.assertEqual(
+        response.status_code,
+        status.HTTP_200_OK,
+      )
+
+      returned_ids = [
+        project["id"]
+        for project in response.data
+      ]
+
+      self.assertIn(
+        similar_project.id,
+        returned_ids,
+      )
+
+      self.assertNotIn(
+        self.project.id,
+        returned_ids,
+      )
+
+    def test_staff_can_toggle_project_feature(self):
+      self.owner.is_staff = True
+      self.owner.save(update_fields=["is_staff"])
+
+      self.authenticate(self.owner)
+
+      response = self.client.post(
+        reverse(
+            "projects:project-feature-toggle",
+            args=[self.project.id],
+        )
+      )
+
+      self.assertEqual(
+        response.status_code,
+        status.HTTP_200_OK,
+      )
+
+      self.project.refresh_from_db()
+
+      self.assertTrue(
+          self.project.is_featured
+      )
+
+      self.assertTrue(
+        response.data["is_featured"]
+      )
+    def test_non_staff_cannot_toggle_project_feature(self):
+     self.authenticate(self.owner)
+
+     response = self.client.post(
+        reverse(
+            "projects:project-feature-toggle",
+            args=[self.project.id],
+        )
+     )
+
+     self.assertEqual(
+        response.status_code,
+        status.HTTP_403_FORBIDDEN,
+     ) 
+
+    def test_staff_can_delete_any_project(self):
+     self.owner.is_staff = True
+     self.owner.save(update_fields=["is_staff"])
+
+     self.authenticate(self.owner)
+
+     project_id = self.project.id
+
+     response = self.client.delete(
+        reverse(
+            "projects:project-detail",
+            args=[project_id],
+        )
+     )
+
+     self.assertEqual(
+        response.status_code,
+        status.HTTP_204_NO_CONTENT,
+     )
+
+     self.assertFalse(
+        Project.objects.filter(
+            id=project_id
+        ).exists()
+     )
+
+    def test_non_owner_cannot_delete_project(self):
+     self.authenticate(self.other_user)
+
+     response = self.client.delete(
+        reverse(
+            "projects:project-detail",
+            args=[self.project.id],
+        )
+     )
+
+     self.assertEqual(
+        response.status_code,
+        status.HTTP_403_FORBIDDEN,
+     )
+
+class ProjectImageAPITests(TestCase):
+
+    def setUp(self):
+        self.client = APIClient()
+
+        self.owner = User.objects.create_user(
+            email="imageowner@example.com",
+            password="StrongPass123",
+            first_name="Image",
+            last_name="Owner",
+            phone_number="01011112222",
+            is_active=True,
+            is_email_verified=True,
+        )
+
+        self.other_user = User.objects.create_user(
+            email="otherimage@example.com",
+            password="StrongPass123",
+            first_name="Other",
+            last_name="User",
+            phone_number="01033334444",
+            is_active=True,
+            is_email_verified=True,
+        )
+
+        self.category = Category.objects.create(
+            name="Environment"
+        )
+
+        self.project = Project.objects.create(
+            owner=self.owner,
+            title="Plastic Recycling",
+            details="Recycling project.",
+            category=self.category,
+            target_amount=Decimal("50000.00"),
+            start_date=timezone.localdate(),
+            end_date=timezone.localdate() + timedelta(days=30),
+        )
+
+    def get_image_file(self):
+        return SimpleUploadedFile(
+            "project.jpg",
+            b"fake-image-content",
+            content_type="image/jpeg",
+        )
+
+    def test_owner_can_upload_project_image(self):
+        self.client.force_authenticate(
+            user=self.owner
+        )
+
+        response = self.client.post(
+            f"/api/projects/{self.project.id}/images/",
+            {
+                "image": self.get_image_file(),
+            },
+            format="multipart",
+        )
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_201_CREATED,
+        )
+
+    def test_non_owner_cannot_upload_project_image(self):
+        self.client.force_authenticate(
+            user=self.other_user
+        )
+
+        response = self.client.post(
+            f"/api/projects/{self.project.id}/images/",
+            {
+                "image": self.get_image_file(),
+            },
+            format="multipart",
+        )
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_403_FORBIDDEN,
+        )
+
+class HomeAPITests(TestCase):
+
+    def setUp(self):
+        self.client = APIClient()
+
+        self.owner = User.objects.create_user(
+            email="homeowner@example.com",
+            password="StrongPass123",
+            first_name="Home",
+            last_name="Owner",
+            phone_number="01055556666",
+            is_active=True,
+            is_email_verified=True,
+        )
+
+        self.category = Category.objects.create(
+            name="Technology"
+        )
+
+    def create_project(
+        self,
+        title,
+        days_from_start=0,
+        days_to_end=30,
+        featured=False,
+    ):
+        return Project.objects.create(
+            owner=self.owner,
+            title=title,
+            details="Homepage test project.",
+            category=self.category,
+            target_amount=Decimal("50000.00"),
+            start_date=timezone.localdate()
+            + timedelta(days=days_from_start),
+            end_date=timezone.localdate()
+            + timedelta(days=days_to_end),
+            is_featured=featured,
+        )
+
+    def test_home_endpoint_returns_expected_sections(self):
+        self.create_project(
+            "Featured Technology Project",
+            featured=True,
+        )
+
+        response = self.client.get(
+            "/api/projects/home/"
+        )
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_200_OK,
+        )
+
+        self.assertIn(
+            "highest_rated",
+            response.data,
+        )
+
+        self.assertIn(
+            "latest",
+            response.data,
+        )
+
+        self.assertIn(
+            "featured",
+            response.data,
+        )
+
+        self.assertIn(
+            "categories",
+            response.data,
+        )
+
+    def test_home_only_returns_running_featured_projects(self):
+        self.create_project(
+            "Running Featured",
+            featured=True,
+        )
+
+        self.create_project(
+            "Upcoming Featured",
+            days_from_start=5,
+            days_to_end=30,
+            featured=True,
+        )
+
+        response = self.client.get(
+            "/api/projects/home/"
+        )
+
+        featured_titles = [
+            project["title"]
+            for project in response.data["featured"]
+        ]
+
+        self.assertIn(
+            "Running Featured",
+            featured_titles,
+        )
+
+        self.assertNotIn(
+            "Upcoming Featured",
+            featured_titles,
         )

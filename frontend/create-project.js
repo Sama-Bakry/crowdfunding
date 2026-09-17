@@ -2,7 +2,7 @@
 
 
 let createdProjectId = null;
-
+let selectedProjectImages = [];
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -168,13 +168,35 @@ async function handleCreateSubmit(event) {
 
 async function handleImageSelected(event) {
 
-    const files = Array.from(event.target.files || []);
+    const files =
+        Array.from(event.target.files || []);
 
-    if (files.length === 0 || !createdProjectId) {
+    if (files.length === 0) {
+        return;
+    }
+
+    if (!createdProjectId) {
+        showAlertOn(
+            "create-alert",
+            "Please create the project first before adding images.",
+            "error"
+        );
+
         return;
     }
 
     for (const file of files) {
+
+        if (!file.type.startsWith("image/")) {
+            showAlertOn(
+                "create-alert",
+                "Please select image files only.",
+                "error"
+            );
+
+            continue;
+        }
+
         await uploadProjectImage(file);
     }
 
@@ -235,6 +257,79 @@ async function removeUploadedImage(imageId, element) {
     } catch (error) {
         console.error("Failed to remove image:", error);
     }
+}
+function renderSelectedImages() {
+
+    const grid =
+        document.getElementById(
+            "image-upload-grid"
+        );
+
+    const addButton =
+        grid.querySelector(
+            ".image-upload-add"
+        );
+
+    grid
+        .querySelectorAll(
+            ".image-upload-item"
+        )
+        .forEach(
+            (element) => element.remove()
+        );
+
+    selectedProjectImages.forEach(
+        (file, index) => {
+
+            const item =
+                document.createElement(
+                    "div"
+                );
+
+            item.className =
+                "image-upload-item";
+
+            const imageUrl =
+                URL.createObjectURL(file);
+
+            item.innerHTML = `
+                <img
+                    src="${imageUrl}"
+                    alt="Selected project image"
+                >
+
+                <button
+                    type="button"
+                    class="image-upload-remove"
+                    data-index="${index}"
+                    aria-label="Remove image"
+                >
+                    ×
+                </button>
+            `;
+
+            item
+                .querySelector(
+                    ".image-upload-remove"
+                )
+                .addEventListener(
+                    "click",
+                    () => {
+
+                        selectedProjectImages
+                            .splice(index, 1);
+
+                        renderSelectedImages();
+
+                    }
+                );
+
+            grid.insertBefore(
+                item,
+                addButton
+            );
+        }
+    );
 }
 
 

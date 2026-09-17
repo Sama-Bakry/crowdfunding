@@ -185,11 +185,29 @@ async function loadProjects() {
 function renderProjectCard(project) {
 
     const imageHtml = project.cover_image
-        ? `<img src="${project.cover_image}" alt="${escapeHtml(project.title)}">`
-        : escapeHtml(project.category ? project.category.name : "Project");
+        ? `
+            <img
+                src="${project.cover_image}"
+                alt="${escapeHtml(project.title)}"
+            >
+        `
+        : escapeHtml(
+            project.category
+                ? project.category.name
+                : "Project"
+        );
+
+    const rating =
+        project.average_rating !== null &&
+        project.average_rating !== undefined
+            ? Number(project.average_rating).toFixed(1)
+            : "0.0";
 
     return `
-        <a class="browse-card" href="project-details.html?id=${project.id}">
+        <a
+            class="browse-card"
+            href="project-details.html?id=${project.id}"
+        >
 
             <div class="browse-card-image">
                 ${imageHtml}
@@ -198,21 +216,77 @@ function renderProjectCard(project) {
             <div class="browse-card-body">
 
                 <div class="browse-card-meta">
-                    <span>${escapeHtml(project.category ? project.category.name : "Uncategorized")}</span>
+
+                    <span>
+                        ${escapeHtml(
+                            project.category
+                                ? project.category.name
+                                : "Uncategorized"
+                        )}
+                    </span>
+
                     ${statusBadgeHtml(project.status)}
+
                 </div>
 
-                <h3>${escapeHtml(project.title)}</h3>
+                <div
+                    style="
+                        display:flex;
+                        align-items:flex-start;
+                        justify-content:space-between;
+                        gap:12px;
+                    "
+                >
+
+                    <h3>
+                        ${escapeHtml(project.title)}
+                    </h3>
+
+                    <span
+                        style="
+                            flex-shrink:0;
+                            color:#d98225;
+                            font-size:12px;
+                            font-weight:800;
+                            white-space:nowrap;
+                        "
+                    >
+                        ★ ${rating}
+                    </span>
+
+                </div>
+
+                <p
+                    style="
+                        margin:9px 0 13px;
+                        color:var(--muted);
+                        font-size:11px;
+                    "
+                >
+                    Target:
+                    ${formatCurrency(project.target_amount)}
+                </p>
 
                 ${progressBarHtml(project.funding_progress)}
 
                 <div class="browse-card-footer">
+
                     <span class="browse-card-amount">
-                        <strong>${project.funding_progress}%</strong> funded
+                        <strong>
+                            ${Number(
+                                project.funding_progress || 0
+                            ).toFixed(2)}%
+                        </strong>
+                        funded
                     </span>
+
                     <span class="browse-card-amount">
-                        Target ${formatCurrency(project.target_amount)}
+                        Target
+                        ${formatCurrency(
+                            project.target_amount
+                        )}
                     </span>
+
                 </div>
 
             </div>

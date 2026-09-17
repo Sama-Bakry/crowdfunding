@@ -3,6 +3,7 @@ from django.urls import path
 from .views import (
     CategoryDetailView,
     CategoryListCreateView,
+    HomeView,
     MyProjectsView,
     ProjectCancelView,
     ProjectDetailView,
@@ -10,6 +11,8 @@ from .views import (
     ProjectImageListCreateView,
     ProjectListCreateView,
     TagListCreateView,
+    SimilarProjectsView,
+    ProjectFeatureToggleView,
 )
 
 
@@ -38,9 +41,24 @@ urlpatterns = [
         name="my-projects",
     ),
     path(
+      "home/",
+      HomeView.as_view(),
+      name="home",
+    ),
+    path(
         "",
         ProjectListCreateView.as_view(),
         name="project-list",
+    ),
+    path(
+    "<int:pk>/feature/",
+    ProjectFeatureToggleView.as_view(),
+    name="project-feature-toggle",
+    ),
+    path(
+    "<int:pk>/similar/",
+    SimilarProjectsView.as_view(),
+    name="project-similar",
     ),
     path(
         "<int:pk>/",

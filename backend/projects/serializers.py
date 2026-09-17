@@ -58,7 +58,7 @@ class TagSerializer(serializers.ModelSerializer):
 
 class ProjectImageSerializer(serializers.ModelSerializer):
   
-
+    image = serializers.FileField()
     class Meta:
         model = ProjectImage
 
@@ -81,7 +81,7 @@ class ProjectListSerializer(serializers.ModelSerializer):
     )
 
     cover_image = serializers.SerializerMethodField()
-
+    average_rating = serializers.SerializerMethodField()
     status = serializers.CharField(
         read_only=True,
     )
@@ -102,21 +102,27 @@ class ProjectListSerializer(serializers.ModelSerializer):
         model = Project
 
         fields = [
-            "id",
-            "title",
-            "category",
-            "target_amount",
-            "funding_progress",
-            "status",
-            "is_cancelled",
-            "can_be_cancelled",
-            "start_date",
-            "end_date",
-            "cover_image",
-        ]
+           "id",
+           "title",
+           "category",
+           "target_amount",
+           "funding_progress",
+           "average_rating",
+           "status",
+           "is_cancelled",
+           "is_featured",
+           "can_be_cancelled",
+           "start_date",
+           "end_date",
+           "cover_image",
+           "details",
+           
+   ]
 
     def get_can_be_cancelled(self, obj):
         return obj.can_be_cancelled()
+    def get_average_rating(self, obj):
+        return obj.average_rating
     def get_cover_image(self, obj):
         first_image = obj.images.first()
 
